@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Demo - Index</title>
+<script src='jquery-1.11.1.js'></script>
+<style type="text/css">
+</style>
+</head>
+<body>
+
+<script type='text/javascript'>
+	// namespace = function(ns) {
+	// 	var parts = ns.split('.'),
+	// 		parent = window, i;
+	// 	//执行后，lib.foo.fn就注册为了window的对象
+	// 	for(i = 0; i < parts.length; i++) {
+	// 		if (typeof parent[parts[i]] == 'undefined') {
+	// 			parent[parts[i]] = {};
+	// 		}
+	// 		parent = parent[parts[i]];
+	// 	}
+	// }
+
+	// var ns = 'lib.foo.st';
+	// var res = namespace(ns);
+	// console.log(res);
+
+
+//##########################################################################
+
+
+	inherit = function(child, parent, args) {
+		//让父构造函数在子构造函数的上下文环境中执行，则会让child拥有parent的所有函数和方法
+		parent.apply(child, args || []);
+		//同时让parent的prototype上内容也赋值给child
+		$.extend(child.constructor.prototype, parent.prototype);
+	}
+
+	function child() {
+		this.name = 'aaaa';
+		this.childfn = function() {
+
+		}
+		// parent.apply(this, 'benlinhuo');
+		inherit(this, parent, ['benlinhuo']);
+	}
+
+	function parent(name) {
+		this.parName = name;
+		this.parentfn = function() {}
+	}
+	var pp = new parent();
+	var cc = new child();
+	console.log(pp);
+	console.log(cc);
+	
+</script> 
+</body>
+</html>
