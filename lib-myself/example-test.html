@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Demo - Index</title>
 <script src='jquery-1.11.1.js'></script>
+<script src='base.js'></script>
 <style type="text/css">
 </style>
 </head>
@@ -30,30 +31,41 @@
 //##########################################################################
 
 
-	inherit = function(child, parent, args) {
-		//让父构造函数在子构造函数的上下文环境中执行，则会让child拥有parent的所有函数和方法
-		parent.apply(child, args || []);
-		//同时让parent的prototype上内容也赋值给child
-		$.extend(child.constructor.prototype, parent.prototype);
-	}
+	// inherit = function(child, parent, args) {
+	// 	//让父构造函数在子构造函数的上下文环境中执行，则会让child拥有parent的所有函数和方法
+	// 	parent.apply(child, args || []);
+	// 	//同时让parent的prototype上内容也赋值给child
+	// 	$.extend(child.constructor.prototype, parent.prototype);
+	// }
 
-	function child() {
-		this.name = 'aaaa';
-		this.childfn = function() {
+	// function child() {
+	// 	this.name = 'aaaa';
+	// 	this.childfn = function() {
 
-		}
-		// parent.apply(this, 'benlinhuo');
-		inherit(this, parent, ['benlinhuo']);
-	}
+	// 	}
+	// 	// parent.apply(this, 'benlinhuo');
+	// 	inherit(this, parent, ['benlinhuo']);
+	// }
 
-	function parent(name) {
-		this.parName = name;
-		this.parentfn = function() {}
-	}
-	var pp = new parent();
-	var cc = new child();
-	console.log(pp);
-	console.log(cc);
+	// function parent(name) {
+	// 	this.parName = name;
+	// 	this.parentfn = function() {}
+	// }
+	// var pp = new parent();
+	// var cc = new child();
+	// console.log(pp);
+	// console.log(cc);
+
+
+//#############################################################################
+
+lib.namespace('lib.test');
+lib.on('en br', function(ar1, ar2) {
+	console.log('en and br trigger ' + ar1 + ':' + ar2);
+});
+lib.trigger(en, 'en1111', 'en2222');
+
+
 	
 </script> 
 </body>
