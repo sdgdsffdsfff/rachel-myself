@@ -59,11 +59,26 @@
 
 //#############################################################################
 
-lib.namespace('lib.test');
-lib.on('en br', function(ar1, ar2) {
-	console.log('en and br trigger ' + ar1 + ':' + ar2);
-});
-lib.trigger(en, 'en1111', 'en2222');
+lib.namespace('lib.example');
+
+lib.example = function() {
+    lib.inherit(this, lib.customEvent);//创建该命名空间对象时，需要用new，否则此处的this指向window
+    var keys = this.on('en br', function(ar1, ar2) {
+        console.log('en and br trigger ' + ar1 + ':' + ar2);
+    });
+//    this.trigger('en', ['en1111', 'en2222']);
+//    this.off('en', keys);
+//    this.trigger('en', 'more one bind');
+
+    this.once('hbl', function(str) {
+        console.log('once function arguments are:' + str);
+    });
+    this.trigger('hbl', 'success');
+    //因为时once，所以会报错：Uncaught TypeError: Cannot read property 'fn' of undefined
+    this.trigger('hbl', 'this is once bind');
+};
+
+new lib.example();
 
 
 	
