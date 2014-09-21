@@ -4,6 +4,78 @@
     <title></title>
 </head>
 <body>
+    <script>
+        (function ($){
+            var switchComm = new aui.Switch({switchST: 'j-switch-volti',auto:true,interval:3000,effect:'fade'});
+            var $sc = $('#j-switch-volti'), $sc_pg = $sc.find('.paging'), $sc_a = $sc_pg.find('a');
+            if (switchComm.op.hideNav) {
+                $sc_pg.add($sc_p).add($sc_n).remove();
+                return;
+            }
+            $sc_a.each(function (index) {
+                $(this).on('mouseenter', function () {
+                    switchComm.switchTo(index);
+                });
+            });
+            /*仅当分页显示时有添加当前类名*/
+            switchComm.on('playAfter', function () {
+                currentClass();
+            });
+            currentClass();
+            function currentClass() {
+                $sc_a.removeClass('current');
+                $sc_a.eq(switchComm.op.showpage).addClass('current');
+            }
 
+        })(jQuery);
+
+
+
+        (function ($) {
+            var switchArrow = new aui.Switch({switchST: 'j-switch-arrow',auto:true});
+            var $sc = $('#j-switch-arrow'),$sc_p = $sc.find('.prev'), $sc_n = $sc.find('.next');
+            $sc.on('mouseover',function(){
+                $sc_n.css('display','block');
+                $sc_p.css('display','block');
+            })
+            $sc.on('mouseout',function(){
+                $sc_n.css('display','none');
+                $sc_p.css('display','none');
+            })
+            $sc_n.on('click', function () {
+                switchArrow.next();
+            });
+            $sc_p.on('click', function () {
+                switchArrow.prev();
+            });
+        })(jQuery);
+
+
+
+        (function ($) {
+            var switchTotal = new aui.Switch({switchST: 'j-switch-total',auto:true});
+            var $sc = $('#j-switch-total'),$sc_p = $sc.find('.prev'), $sc_n = $sc.find('.next'),$sc_pg = $sc.find('.paging'), $sc_a = $sc_pg.find('a');
+            $sc_a.each(function (index) {
+                $(this).on('mouseenter', function () {
+                    switchTotal.switchTo(index);
+                });
+            });
+            /*仅当分页显示时有添加当前类名*/
+            switchTotal.on('playAfter', function () {
+                currentClass();
+            });
+            currentClass();
+            function currentClass() {
+                $sc_a.removeClass('current');
+                $sc_a.eq(switchTotal.op.showpage).addClass('current');
+            }
+            $sc_n.on('click', function () {
+                switchTotal.next();
+            });
+            $sc_p.on('click', function () {
+                switchTotal.prev();
+            });
+        })(jQuery);
+    </script>
 </body>
 </html>
