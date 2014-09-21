@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>时钟</title>
+    <style type="text/css">
+        body {
+            padding-top: 50px;
+            background: -webkit-radial-gradient(center center, circle, #d8d9dc, #646f6a);
+        }
+
+        /*.clock-container {*/
+            /*width: 300px;*/
+            /*height: 300px;*/
+            /*margin: 0 auto;*/
+            /*border: 1px solid red;*/
+            /*border-radius: 150px;*/
+        /*}*/
+
+        #clock {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            border: 5px solid #ffffff;
+            border-radius: 150px;
+            position: relative;
+        }
+
+        .clock-center-out {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            background-color: #eeeeee;
+            left: 50%;
+            top: 50%;
+            margin: -10px;
+        }
+
+        .clock-center-in {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: red;
+            left: 50%;
+            top: 50%;
+            margin: -5px;
+            z-index: 10;
+        }
+
+        #hour {
+            position: absolute;
+            width: 100px;
+            height: 6px;
+            background-color: #000000;
+            border-radius: 5px;
+            left: 50%;
+            top: 50%;
+            margin: -3px -10px;
+            -webkit-transform-origin: 10px;
+            z-index: 2;
+        }
+
+        #minute {
+            position: absolute;
+            width: 130px;
+            height: 4px;
+            background-color: #000000;
+            border-radius: 2px;
+            left: 50%;
+            top: 50%;
+            margin: -3px -10px;
+            -webkit-transform-origin: 10px;
+            z-index: 5;
+        }
+
+        #second {
+            position: absolute;
+            width: 150px;
+            height: 2px;
+            background-color: #ff0000;
+            border-radius: 1px;
+            left: 50%;
+            top: 50%;
+            margin: -2px -10px;
+            -webkit-transform-origin: 10px;
+            z-index: 7;
+        }
+
+        #clock em {
+            width: 2px;
+            height: 5px;
+            background-color: #000000;
+            position: absolute;
+            left: 200px;
+            top: 20px;
+            -webkit-transform-origin: 50% 0;
+            margin-left: -1px;
+        }
+
+        #clock .isHour {
+            width: 6px;
+            height: 10px;
+            margin-left: -3px;
+        }
+
+        #clock em i {
+            font-size: 20px;
+            color: #000;
+            position: absolute;
+            top: 11px;
+            left: -4px;
+            text-shadow: 1px 1px #fff;
+        }
+
+    </style>
+</head>
+<body>
+    <!--<div class="clock-container">-->
+        <div id="clock">
+            <div class="clock-center-out"></div>
+            <div class="clock-center-in"></div>
+            <div id="hour"></div>
+            <div id="minute"></div>
+            <div id="second"></div>
+        </div>
+    <!--</div>-->
+    <script type="text/javascript">
+
+        ;(function() {
+            function Clock(dom) {
+                var self = this;
+                self.hour = document.getElementById('hour');
+                self.minute = document.getElementById('minute');
+                self.second = document.getElementById('second');
+
+                self.radius = 150;
+                initClock();
+
+                function initClock() {
+                    //生成
+                    var i;
+                    for (i = 1; i < 61; i++) {
+                        var em = document.createElement('em');
+                        if (i % 5 == 0) {
+                            em.className = 'isHour';
+                            em.innerHTML = '<i style="-webkit-transform: rotate(' + (-i * 6) + 'deg)">' + (i / 5) + '</i>';
+                        }
+                        var pos = getPos(i);
+                        em.style.cssText = 'left: ' + pos.x + 'px; top:' + pos.y + 'px;' + '-webkit-transform: rotate(' + (i * 6) + 'deg)';
+                        dom.appendChild(em);
+                    }
+
+                    //获取每个em的位置，i表示1-60(每个i 代表6deg)
+                    function getPos(i) {
+                        var circular = (2 * Math.PI / 360) * i * 6;
+                        return {
+                            x: (self.radius + Math.sin(circular) * self.radius),
+                            y: (self.radius - Math.cos(circular) * self.radius)
+                        }
+                    }
+                }
+
+
+                //设置时钟时间，让其指定到正确位置
+                function setTime (hour, minute, second) {
+                    self.second.style.cssText = '-webkit-transform: rotate(' + (second * 6 - 90) + 'deg)';
+                    self.minute.style.cssText = '-webkit-transform: rotate(' + (minute * 6 - 90) + 'deg)';
+                    var h_m_add = minute / 60 * (5 * 6);//如果是10点40，则该部分表示40分钟，时针应该转到的位置
+                    self.hour.style.cssText = '-webkit-transform: rotate(' + (hour * 30 - 90 + h_m_add) + 'deg)';
+                }
+
+                function autoRun() {
+                    //对时间做处理
+                    s++;
+                    s > 59 ? (m++, s = 0) : '';
+                    m > 59 ? (h++, m = 0) : '';
+                    h > 12 ? (h -= 12) : '';
+                    setTime(h, m, s);
+                }
+
+                //时钟开始工作
+                var date = new Date();
+                var h = date.getHours();
+                var m = date.getMinutes();
+                var s = date.getSeconds();
+                function run() {
+                    setTime(h, m, s);
+                    setInterval(autoRun, 1000);
+
+                }
+
+                function setFixedTime(hour, minu, sec) {
+                    sec > 59 ? (minu++, sec = 0) : '';
+                    minu > 59 ? (hour++, minu = 0) : '';
+                    hour > 12 ? (hour -= 12) : '';
+                    setTime(hour, minu, sec);
+                }
+
+                return {
+                    run: run,
+                    setTime: setTime
+                }
+
+            }
+
+            var clock = Clock(document.getElementById('clock'));
+            clock.run();
+//            clock.setTime(2, 60, 2);
+        })();
+
+    </script>
+</body>
+</html>
