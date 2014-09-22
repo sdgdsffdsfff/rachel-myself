@@ -1,81 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Switch-Example</title>
+    <style type="text/css">
+        /*h3*/
+        .aui-comm-title {
+            font: 100 20px/36px "\5FAE\8F6F\96C5\9ED1";
+            color: #666;
+        }
+
+        /*最外层div*/
+        .comm {
+            width: 800px;
+            height: 375px;
+            position: relative;
+        }
+
+        /*装图片的div*/
+        .content {
+            width: 800px;
+            height: 375px;
+        }
+
+        /*表示fade的小图标展示*/
+        .paging {
+            height: 18px;
+            width: 106px;
+            
+        }
+
+    </style>
+
+    <script src='../jquery-1.11.1.js'></script>
+    <script src='../base.js'></script>
 </head>
 <body>
-    <script>
-        (function ($){
-            var switchComm = new aui.Switch({switchST: 'j-switch-volti',auto:true,interval:3000,effect:'fade'});
-            var $sc = $('#j-switch-volti'), $sc_pg = $sc.find('.paging'), $sc_a = $sc_pg.find('a');
-            if (switchComm.op.hideNav) {
-                $sc_pg.add($sc_p).add($sc_n).remove();
-                return;
-            }
-            $sc_a.each(function (index) {
-                $(this).on('mouseenter', function () {
-                    switchComm.switchTo(index);
-                });
-            });
-            /*仅当分页显示时有添加当前类名*/
-            switchComm.on('playAfter', function () {
-                currentClass();
-            });
-            currentClass();
-            function currentClass() {
-                $sc_a.removeClass('current');
-                $sc_a.eq(switchComm.op.showpage).addClass('current');
-            }
+    <h3 class="aui-comm-title">测试案例一：（fade）</h3>
+    <div class="switch comm" id='switch-example1'>
+        <div class="content">
+            <img class="item" src='img/aui_img1.jpg' width='800' height="375" />
+            <img class="item" src='img/aui_img2.jpg' width='800' height="375" />
+            <img class="item" src='img/aui_img3.jpg' width='800' height="375" />
+        </div>
+        <div class="paging">
+            <a href="javascript:void(0);" class="current"></a>
+            <a href="javascript:void(0);"></a>
+            <a href="javascript:void(0);"></a>
+        </div>
+    </div>
+    <script type="text/javascript">
 
-        })(jQuery);
-
-
-
-        (function ($) {
-            var switchArrow = new aui.Switch({switchST: 'j-switch-arrow',auto:true});
-            var $sc = $('#j-switch-arrow'),$sc_p = $sc.find('.prev'), $sc_n = $sc.find('.next');
-            $sc.on('mouseover',function(){
-                $sc_n.css('display','block');
-                $sc_p.css('display','block');
-            })
-            $sc.on('mouseout',function(){
-                $sc_n.css('display','none');
-                $sc_p.css('display','none');
-            })
-            $sc_n.on('click', function () {
-                switchArrow.next();
-            });
-            $sc_p.on('click', function () {
-                switchArrow.prev();
-            });
-        })(jQuery);
-
-
-
-        (function ($) {
-            var switchTotal = new aui.Switch({switchST: 'j-switch-total',auto:true});
-            var $sc = $('#j-switch-total'),$sc_p = $sc.find('.prev'), $sc_n = $sc.find('.next'),$sc_pg = $sc.find('.paging'), $sc_a = $sc_pg.find('a');
-            $sc_a.each(function (index) {
-                $(this).on('mouseenter', function () {
-                    switchTotal.switchTo(index);
-                });
-            });
-            /*仅当分页显示时有添加当前类名*/
-            switchTotal.on('playAfter', function () {
-                currentClass();
-            });
-            currentClass();
-            function currentClass() {
-                $sc_a.removeClass('current');
-                $sc_a.eq(switchTotal.op.showpage).addClass('current');
-            }
-            $sc_n.on('click', function () {
-                switchTotal.next();
-            });
-            $sc_p.on('click', function () {
-                switchTotal.prev();
-            });
-        })(jQuery);
     </script>
 </body>
 </html>
