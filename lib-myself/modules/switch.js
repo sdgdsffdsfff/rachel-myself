@@ -10,6 +10,7 @@ $('#switch-example1').on('click', function() {fn();});
 var fn = function() {console.log('111');}
 function fn() {console.log('22')};
 
+
 ;(function($) {
     lib.namespace('lib.switch');
 
