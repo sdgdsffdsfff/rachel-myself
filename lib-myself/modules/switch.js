@@ -5,8 +5,15 @@
  * Time: 下午4:30
  * To change this template use File | Settings | File Templates.
  */
+
+$('#switch-example1').on('click', function() {fn();});
+var fn = function() {console.log('111');}
+function fn() {console.log('22')};
+
 ;(function($) {
     lib.namespace('lib.switch');
+
+    lib.switch = function()
 
     function Switch(options) {
         //默认参数
@@ -17,7 +24,7 @@
             itemCN: 'item', //class名称，每个可切换元素（例如li）
             effect: 'slide', //切换效果，默认值slide，可选择值[slide/fade/none]
             vertical: 'false', //是否垂直滚动，仅在切换效果是slide时才会有效，默认为false，可选：true/false
-            auto: 'true', //是否自动播放，默认为false，可选值：true/false
+            auto: 'true', //是否自动播放，默认为false，可选值：true/false   
             start: 0, //起始帧，默认第一帧（0代表第一帧）
             duration: 400, //每帧动画持续时间，单位ms，默认400
             interval: 5000, //每帧动画间隔时间，单位ms，默认5000
@@ -26,6 +33,8 @@
         }, op, self = this;
 
         function init() {
+            //继承base.js中自定义事件
+            lib.inherit(self, lib.customEvent);
             op = $.extend(defOP, options || {});
             initParams();
             startPlay();
@@ -195,11 +204,20 @@
             play(null, false, true);
         }
 
+        /*
+        * 获取当前展示的图片的page（不是帧数，=帧数*switchNum）
+        */
+        function getCurrPage() {
+            return op.currPage;
+        }
+
+
 
         return {
             switchTo: switchTo,
             switchPrev: switchPrev,
-            switchNext: switchNext
+            switchNext: switchNext,
+            getCurrPage: getCurrPage
         }
 
     }

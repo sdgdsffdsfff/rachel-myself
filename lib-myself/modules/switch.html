@@ -20,19 +20,41 @@
         .content {
             width: 800px;
             height: 375px;
+            overflow: hidden;
         }
 
         /*表示fade的小图标展示*/
         .paging {
             height: 18px;
+            line-height: 16px;
             width: 106px;
-            
+            display: inline-block;
+            position: absolute;
+            left: 50%;
+            margin-left: -53px;
+            bottom: 10px;
+            text-align: center;
+        }
+
+        .paging a {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+            background: #d9d9d9;
+        }
+
+        .paging .current {
+            background: #178058;
         }
 
     </style>
 
     <script src='../jquery-1.11.1.js'></script>
     <script src='../base.js'></script>
+    <script src='./switch.js'></script>
 </head>
 <body>
     <h3 class="aui-comm-title">测试案例一：（fade）</h3>
@@ -49,7 +71,22 @@
         </div>
     </div>
     <script type="text/javascript">
+        (function($) {
+            var switchObj = new lib.switch({switchId:'switch-example1', auto: true, effect: 'fade'});
+            var item = $('.item'), paging = $('.paging'), link = paging.find('a');
+            item.each(function(i, v) {
+                $(v).on('mouseenter', function(e) {
+                    switchObj.switchTo(i);
+                });
+            }); 
+            //paging变化
+            switchObj.on('playAfter', function(e) {
+                link.removeClass('current');
+                link[switchObj.getCurrPage()].addClass('current');
+            });
 
+        })(jQuery);
+       
     </script>
 </body>
 </html>
