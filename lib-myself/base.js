@@ -110,5 +110,5 @@
 	})(_lib.customEvent);
 
 	window.lib = _lib;
-console.log('llll')
+	
 })(jQuery);
