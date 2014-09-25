@@ -18,11 +18,11 @@
             contentCN: 'content', //class名称，全部切换内容（例如ul）
             itemCN: 'item', //class名称，每个可切换元素（例如li）
             effect: 'slide', //切换效果，默认值slide，可选择值[slide/fade/none]
-            vertical: 'false', //是否垂直滚动，仅在切换效果是slide时才会有效，默认为false，可选：true/false
+            vertical: false, //是否垂直滚动，仅在切换效果是slide时才会有效，默认为false，可选：true/false
             auto: 'true', //是否自动播放，默认为false，可选值：true/false   
             start: 0, //起始帧，默认第一帧（0代表第一帧）
             duration: 400, //每帧动画持续时间，单位ms，默认400
-            interval: 5000, //每帧动画间隔时间，单位ms，默认5000
+            interval: 1000, //每帧动画间隔时间，单位ms，默认5000
             switchNum: 1, //每帧切换的元素数目，默认为1
             clipNum: 1 //展示区域的元素数目，默认为1
         }, op, self = this;
@@ -52,13 +52,17 @@
             op.currPage = 0;//初始化当前page(每个图片都算做一个page)
             op.itemCount = op.item.length;//变化的图片总个数
             op.leftOrTop = op.vertical ? 'top' : 'left';
-            op.widthOrHeight = op.vertical ? op.item.outerHeight : op.item.outerWidth;
+            op.widthOrHeight = op.vertical ? op.item.outerHeight() : op.item.outerWidth();
             
             op.itemMod = op.itemCount / op.switchNum;
+            op.contentSize = op.widthOrHeight * op.itemCount;
 
             //
             if (op.effect == 'slide') {
-                op.content.css('width', op.widthOrHeight * op.itemCount);
+                if (!op.vertical) {
+                    op.content.css('width', op.contentSize);
+                    op.item.css('float', 'left');
+                }
 
             } else if (op.effect == 'fade') {
                 op.item.css('position', 'absolute');
@@ -88,7 +92,7 @@
 
             if (op.auto) {
                 setTimer();
-                op.content.on({
+                op.switchId.on({
                     'mouseenter': function() {
                         clearTimer();
                     },
@@ -117,6 +121,7 @@
         var op = this.op;
         this.trigger('switchBefore');//动画前
         var targetPos = {}, //slide
+            targetItemPos = {}, //最后一张向第一张切换
             targetItem; //fade
 
         //针对itemCount%switchNum!=0
@@ -147,10 +152,21 @@
         function animateOper() {
             if (op.effect == 'slide') {
                 op.content.stop().animate(targetPos, op.duration, function() {
+                    //第一张向最后一张切换（恢复）
+                    if (isprev && op.currPage > (op.itemCount - op.clipNum - 1)) {
+                        op.item.css('position', '');
+                        op.content.css(op.leftOrTop, -op.currPage * op.widthOrHeight);
 
+                    }
+                    if (isnext && op.currPage <= (op.clipNum - 1)) {
+                        op.item.css('position', '');//这样即使item有left，也不会起作用
+                        //恢复移动到最后一张图片右侧的真实位置
+                        op.content.css(op.leftOrTop, -op.currPage * op.widthOrHeight);
+
+                    }
                 });
 
-            } else if (op.effect == 'fade') {
+            } else if (op.effect == 'fade') { 
                 //所有的item都重叠放在一起，然后通过opacity来设置
                 op.item.not(targetItem).animate({opacity: 0}, op.duration);
                 targetItem.animate({opacity: 1}, op.duration);
@@ -173,7 +189,25 @@
             }
 
             if (op.effect == 'slide') {
+                targetItem = op.item.eq(op.currPage);
                 targetPos[op.leftOrTop] = -op.widthOrHeight * op.currPage;
+                //第一张向最后一张切换（或者最后一张向第一张切换，需要考虑clipNum，因为此时是循环switchNum的）
+                if (isprev && op.currPage > (op.itemCount - op.clipNum - 1)) {
+                    targetItemPos['position'] = 'absolute';
+                    targetItemPos[op.leftOrTop] = -op.widthOrHeight * (op.itemCount - op.currPage);
+                    targetItem.css(targetItemPos);
+                    targetPos[op.leftOrTop] = op.widthOrHeight * (op.itemCount - op.currPage);
+                    
+
+                }
+                if (isnext && op.currPage <= (op.clipNum - 1)) {
+                    targetItemPos['position'] = 'relative';
+                    targetItemPos[op.leftOrTop] = op.contentSize + op.currPage * op.widthOrHeight;
+                    targetItem.css(targetItemPos);
+                    targetPos[op.leftOrTop] = -op.contentSize;
+                    
+
+                }
 
             } else if (op.effect == 'fade' || op.effect == 'none') {
                 targetItem = op.item.eq(op.currPage);

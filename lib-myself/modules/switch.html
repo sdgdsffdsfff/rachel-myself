@@ -100,22 +100,22 @@
     </div>
     <script type="text/javascript">
 
-        (function($) {
-            var switchObj = new lib.switch({switchId:'switch-example1', auto: true, effect: 'none'});//此处可以将effect设置为fade测试fade效果
-            var item = $('.item'), paging = $('.paging'), link = paging.find('a');
+        // (function($) {
+        //     var switchObj = new lib.switch({switchId:'switch-example1', auto: true, effect: 'none'});//此处可以将effect设置为fade测试fade效果
+        //     var item = $('.item'), paging = $('.paging'), link = paging.find('a');
 
-            link.each(function(index) {
-                $(this).on('mouseenter', function(e) {
-                    switchObj.switchTo(index);
-                });
-            }); 
-            //paging变化
-            switchObj.on('switchAfter', function(e) {
-                link.removeClass('current');
-                link.eq(switchObj.op.currPage).addClass('current');
-            });
+        //     link.each(function(index) {
+        //         $(this).on('mouseenter', function(e) {
+        //             switchObj.switchTo(index);
+        //         });
+        //     }); 
+        //     //paging变化
+        //     switchObj.on('switchAfter', function(e) {
+        //         link.removeClass('current');
+        //         link.eq(switchObj.op.currPage).addClass('current');
+        //     });
 
-        })(jQuery);
+        // })(jQuery);
        
     </script>
 
@@ -138,9 +138,17 @@
                 switchId: 'switch-example2',
                 contentCN: 'content2',
                 itemCN: 'item2',
-                auto: true,
+                auto: false,
                 effect: 'slide'
             });
+            var prev = $('.prev2'), next = $('.next2');
+            prev.on('click', function() {
+                slideObj.switchPrev();
+            });
+            next.on('click', function() {
+                slideObj.switchNext();
+            });
+            
 
 
         })(jQuery);
