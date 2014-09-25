@@ -129,6 +129,59 @@
             background: #178058;
         }
 
+        /*测试案例四*/
+        .comm4 {
+            width: 800px;
+            height: 375px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .prev4, .next4 {
+            position: absolute;
+            height: 60px;
+            width: 800px;
+            background: red;
+            opacity: 0.6;
+            filter: alpha(opacity=60);
+        }
+
+        .prev4 {
+            top: 0
+        }
+
+        .next4 {
+            bottom: 0;
+        }
+
+        .paging4 {
+            width: 18px;
+            line-height: 140px;
+            height: 128px;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            margin-top: -70px;
+            right: 10px;
+            text-align: center;
+        }
+
+        .paging4 a {
+            display: block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            opacity: 0.8;
+            filter: alpha(opacity=80);
+            background: #d9d9d9;
+            margin-bottom: 8px;
+        }
+
+        .paging4 .current {
+            background: #178058;
+        }
+
+
     </style>
 
     <script src='../../jquery-1.11.1.js'></script>
@@ -139,9 +192,9 @@
     <h3 class="aui-comm-title">测试案例一11：（fade/none）</h3>
     <div class="switch comm" id='switch-example1'>
         <div class="content">
-            <img class="item" src='../img/aui_img1.jpg' width='800' height="375" />
-            <img class="item" src='../img/aui_img2.jpg' width='800' height="375" />
-            <img class="item" src='../img/aui_img3.jpg' width='800' height="375" />
+            <img class="item" src='../img/qq_img1.png' width='800' height="375" />
+            <img class="item" src='../img/qq_img2.png' width='800' height="375" />
+            <img class="item" src='../img/qq_img3.png' width='800' height="375" />
         </div>
         <div class="paging">
             <a href="javascript:void(0);" class="current"></a>
@@ -184,25 +237,24 @@
         <a href="javascript:void(0);" class='next2'></a>
     </div>
     <script type="text/javascript">
-        // (function($) {
-        //     var slideObj = new lib.switch({
-        //         switchId: 'switch-example2',
-        //         contentCN: 'content2',
-        //         itemCN: 'item2',
-        //         auto: false,
-        //         effect: 'slide'
-        //     });
-        //     var prev = $('.prev2'), next = $('.next2');
-        //     prev.on('click', function() {
-        //         slideObj.switchPrev();
-        //     });
-        //     next.on('click', function() {
-        //         slideObj.switchNext();
-        //     });
+        (function($) {
+            var slideObj = new lib.switch({
+                switchId: 'switch-example2',
+                contentCN: 'content2',
+                itemCN: 'item2',
+                auto: false,
+                effect: 'slide',
+                switchNum: 2 // 可将switchNum改为1，进行测试
+            });
+            var prev = $('.prev2'), next = $('.next2');
+            prev.on('click', function() {
+                slideObj.switchPrev();
+            });
+            next.on('click', function() {
+                slideObj.switchNext();
+            });
             
-
-
-        // })(jQuery);
+        })(jQuery);
        
        
     </script>
@@ -210,11 +262,11 @@
     <h3 class="aui-comm-title">测试案例三：（slide，有左右箭头和翻页）</h3>
     <div class="switch3 comm3" id='switch-example3'>
         <div class="content3">
-            <img class="item3" src='../img/aui_img1.jpg' width='800' height="375" />
-            <img class="item3" src='../img/aui_img2.jpg' width='800' height="375" />
-            <img class="item3" src='../img/aui_img3.jpg' width='800' height="375" />
             <img class="item3" src='../img/qq_img1.png' width='800' height="375" />
             <img class="item3" src='../img/qq_img2.png' width='800' height="375" />
+            <img class="item3" src='../img/qq_img3.png' width='800' height="375" />
+            <img class="item3" src='../img/qq_img4.png' width='800' height="375" />
+            <img class="item3" src='../img/qq_img5.png' width='800' height="375" />
         </div>
         <div class="paging3">
             <a href="javascript:void(0);" class="current"></a>
@@ -227,13 +279,15 @@
         <a href="javascript:void(0);" class='next3'></a>
     </div>
     <script type="text/javascript">
+        
         (function($) {
             var switchObj3 = new lib.switch({
                 switchId: 'switch-example3',
                 contentCN: 'content3',
                 itemCN: 'item3',
                 auto: false,
-                effect: 'slide'
+                effect: 'slide',
+                switchNum: 1  
             });
             
             var prev = $('.prev3'), next = $('.next3'), link = $('.paging3').find('a');
@@ -254,7 +308,58 @@
                 link.eq(switchObj3.op.currPage).addClass('current');
             });
         })(jQuery);
+
        
+    </script>
+
+    <h3 class="aui-comm-title">测试案例四：（slide，有上下箭头和翻页：Top）</h3>
+    <div class="switch4 comm4" id='switch-example4'>
+        <div class="content4">
+            <img class="item4" src='../img/qq_img1.png' width='800' height="375" />
+            <img class="item4" src='../img/qq_img2.png' width='800' height="375" />
+            <img class="item4" src='../img/qq_img3.png' width='800' height="375" />
+            <img class="item4" src='../img/qq_img4.png' width='800' height="375" />
+            <img class="item4" src='../img/qq_img5.png' width='800' height="375" />
+        </div>
+        <div class="paging4">
+            <a href="javascript:void(0);" class="current"></a>
+            <a href="javascript:void(0);"></a>
+            <a href="javascript:void(0);"></a>
+            <a href="javascript:void(0);"></a>
+            <a href="javascript:void(0);"></a>
+        </div>
+        <a href="javascript:void(0);" class="prev4"></a>
+        <a href="javascript:void(0);" class='next4'></a>
+    </div>
+    <script type="text/javascript">
+        (function($) {
+            var topSlideObj = new lib.switch({
+                switchId: 'switch-example4',
+                contentCN: 'content4',
+                itemCN: 'item4',
+                auto: false,
+                effect: 'slide',
+                vertical: true
+            });
+            var prev = $('.prev4'), next = $('.next4'), link = $('.paging4').find('a');
+            prev.on('click', function() {
+                topSlideObj.switchPrev();
+            });
+            next.on('click', function() {
+                topSlideObj.switchNext();
+            });
+            link.each(function(index) {
+                $(this).on('mouseenter', function() {
+                    topSlideObj.switchTo(index);
+                });
+            });
+            topSlideObj.on('switchAfter', function() {
+                link.removeClass('current');
+                link.eq(topSlideObj.op.currPage).addClass('current');
+            });
+    
+        })(jQuery);
+        
     </script>
 </body>
 </html>

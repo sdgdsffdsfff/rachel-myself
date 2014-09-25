@@ -54,7 +54,7 @@
             op.leftOrTop = op.vertical ? 'top' : 'left';
             op.widthOrHeight = op.vertical ? op.item.outerHeight() : op.item.outerWidth();
             
-            op.itemMod = op.itemCount / op.switchNum;
+            op.itemMod = op.itemCount % op.switchNum;
             op.contentSize = op.widthOrHeight * op.itemCount;
 
             //
@@ -193,8 +193,9 @@
                 targetPos[op.leftOrTop] = -op.widthOrHeight * op.currPage;
                 //第一张向最后一张切换（或者最后一张向第一张切换，需要考虑clipNum，因为此时是循环switchNum的）
                 if (isprev && op.currPage > (op.itemCount - op.clipNum - 1)) {
-                    targetItemPos['position'] = 'absolute';
-                    targetItemPos[op.leftOrTop] = -op.widthOrHeight * (op.itemCount - op.currPage);
+                    targetItemPos['position'] = 'relative';
+                    targetItemPos[op.leftOrTop] = -op.contentSize;
+                    // targetItemPos[op.leftOrTop] = -op.widthOrHeight * (op.itemCount - op.currPage);
                     targetItem.css(targetItemPos);
                     targetPos[op.leftOrTop] = op.widthOrHeight * (op.itemCount - op.currPage);
                     
