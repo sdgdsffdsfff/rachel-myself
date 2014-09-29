@@ -12,13 +12,15 @@
         	width: 300px;
         	height: 20px;
         	margin: 50px;
-
+        	position: relative;
         }
 
         .slider {
         	width: 60px;
-        	height: 30px;
+        	height: 35px;
         	background: #FF732E;
+        	position: absolute;
+        	top: -7px;
         }
 
         .slider.slider-success {
@@ -27,7 +29,7 @@
 
     </style>
 
-    <script src='../../jquery-1.11.1.js'></script>
+    <script src='../comm-lib/jquery-1.11.1.js'></script>
 </head>
 <body>
     <div class='bg-slider'>
@@ -35,8 +37,9 @@
     </div>
     <script type='text/javascript'>
     	(function($) {
-    		var left = 0, spaceW = 240, startX = 0, $ele = $('.slider'),
+    		var left = 0, spaceW = 240, startX = 0, $ele = $('.slider'), currLeft, isStart = false,
     			right = Math.floor(Math.random() * spaceW + 1);//1~spaceW
+    			right=240;
 			$ele.on({
 				'mousedown': start,
 				'mousemove': move,
@@ -45,19 +48,62 @@
 			function start(e) {
 				stopEBubble(e);
 				startX = e.clientX;
+				currLeft = left;
+				console.log('start: ' + currLeft);
+				//设置捕获范围
+				if ($ele[0].setCapture) {
+					$ele[0].setCapture();
+				} else if (window.captureEvents) {
+					window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+				}
+				isStart = true;
 			}
 
 			function move(e) {
+				if (!isStart) {
+					return;
+				}
 				stopEBubble(e);
-				var 
-				$ele.css('left', e.clientX - startX);
+				currLeft += (e.clientX - startX); 
+				if (currLeft < left || currLeft > right || $ele.hasClass('slider-success')) {
+					return;
+				}
+				
+				$ele.css('left', currLeft);
 				startX = e.clientX;
+				console.log(currLeft);
 			}
 
 			function end(e) {
 				stopEBubble(e);
+				console.log(currLeft + ':::' + right);
+				if (currLeft == right) {
+					$ele.addClass('slider-success');
 
+				} else {
+					//向左滑动到最开始
+					$ele.animate({'left': left}, 500);
+					//moveRightToLeft();
+				}
+				//取消捕获范围
+				if ($ele[0].releaseCapture) {
+					$ele[0].releaseCapture();
+				} else if (window.captureEvents) {
+					window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+				}
+				//清除事件
+				move = null;
+				end = null;
+				isStart = false;
 			}
+
+			// function moveRightToLeft() {
+			// 	var movePercent = 0.1, intervalT = 100;
+
+			// 	currLeft -= movePercent;
+			// 	$ele.css('left', currLeft);
+
+			// }
 
 			function stopEBubble(e) {
 				var e = e || window.event;
