@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="content-type" content='text/html; charset=utf-8' />
-    <!--为了不让它默认的放大等行为，规定用户无法缩放-->
+    <!--为了不让它默认的放大等行为，规定用户无法缩放。且让它-->
     <meta name='viewpoint' content="width=device-width, initial-scale=1.0, maximun-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <!--针对苹果的优化，可选。是否可将苹果应用为全屏，类似于app-->
     <meta name='apple-touch-fullscreen' content='YES' />
@@ -16,7 +16,7 @@
             background: #333;
             overflow: hidden;
             height: 100%;
-            /*当给一个元素设置百分比时，它需要一个比照，如果没有父，则需要给一个定位值。但是在移动开发时，使用position，会很好性能。所以不建议这种方式。一般采用js计算*/
+            /*当给一个元素设置百分比时，它需要一个比照，如果没有父，则需要给一个定位值。但是在移动开发时，使用position，会很耗性能，尤其是使用position得模块很多时。所以不建议这种方式。一般采用js计算*/
             position: absolute;
         }
 
@@ -34,13 +34,25 @@
             overflow: hidden;
         }
         /*垂直居中*/
+        /*方案一*/
+        /*li {*/
+            /*line-height: 568px;*/
+            /*vertical-align: middle;*/
+        /*}*/
+        /*li img {*/
+            /*vertical-align: middle;*/
+        /*}*/
+
+        /*方案二*/
         /*li {*/
             /*display: table-cell;*/
             /*vertical-align: middle;*/
         /*}*/
-
+        /*方案三*/
         li {
+            /*此处不用float而是用-webkit-transform:translate3d(0,0,0)＋position:absolute来实现，因为后面需要做动画*/
             position: absolute;/*会造成内存耗用很大*/
+            /*以下三个属性是为了使内容居中*/
             display: -webkit-box;
             -webkit-box-pack: center;
             -webkit-box-align: center;

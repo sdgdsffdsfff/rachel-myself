@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv='content-type' content="text/html;charset='utf-8'" />
+    <title>各类广告的制作</title>
+    <style type="text/css">
+        #content {
+            width: 970px;
+            height: 3000px;
+            border: 1px solid #333;
+            margin: 0 auto;
+        }
+
+        #ads {
+            position: fixed;/*相对于浏览器定位,不支持ie6，7及以上支持*/
+            right: 0;
+            bottom: 0;
+            width: 300px;
+            height: 300px;
+        }
+
+        .ad-img {
+            display: block;
+            cursor: default;
+        }
+
+        #close-btn {
+            position: absolute;
+            right: 8px;
+            top: 5px;
+            font-size: 20px;
+            height: 17px;
+            line-height: 17px;
+            text-align: center;
+            width: 19px;
+            z-index: 100;
+            border-radius: 2px;
+        }
+
+        #close-btn:link, #close-btn:visited, #close-btn:active {
+            background: none;
+            color: black;
+            text-decoration: none;
+        }
+
+        #close-btn:hover {
+            background: red;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div id='content'>
+        我是内容content
+    </div>
+    <div id='ads'>
+        <!--此处如果我们的广告想是一个小的视频，如.swf.则可以通过dreamweaver,将一个swf文件自动专程html结构，含有object\param等部分。-->
+        <a href="http://www.baidu.com" class="ad-img" target="_blank"><img src='adv2.jpg' width="300" height="300"/></a>
+        <a id='close-btn' href='javascript:void(0);'>×</a>
+    </div>
+    <script type="text/javascript">
+        var $ = function(id) {
+            return document.getElementById(id);
+        }
+        var close = $('close-btn');
+        close.onclick = function() {
+            $('ads').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

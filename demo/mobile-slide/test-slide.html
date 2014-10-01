@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv='content-type' content="text/html;charset='utf-8'" />
+    <!--为了不让它默认的放大等行为，规定用户无法缩放。且让它适应对应设备-->
+    <meta name='viewpoint' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no' />
+    <!--针对苹果的优化，可选。是否可将苹果应用为全屏，类似于app-->
+    <meta name='apple-touch-fullscreen' content="YES" />
+    <!--苹果上有状态条，改变它的颜色为黑色-->
+    <meta name='apple-mobile-web-app-status-bar-style' content='black' />
+    <title>图片滑动组件</title>
+    <style>
+        body {
+            /*reset*/
+            padding: 0;
+            margin: 0;
+            height: 568px;/*window.innerHeight*/
+            overflow: hidden;
+            /*当给一个元素设置百分比时，它需要一个比照，如果没有父，则需要给一个定位值。但是在移动开发时，使用position，会很耗性能，尤其是使用position得模块很多时。所以不建议这种方式。一般采用js计算*/
+            /*position: absolute;
+              height: 100%;
+            */
+        }
+
+        ul, li {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            list-style: none;
+        }
+
+        /*垂直居中*/
+        /*方案一*/
+        /*li {*/
+            /*line-height: 568px;*/
+            /*vertical-align: middle;*/
+        /*}*/
+        /*li img {*/
+            /*vertical-align: middle;*/
+        /*}*/
+
+        /*方案二*/
+        /*li {*/
+            /*display: table-cell;*//*ie8及以上支持*/
+            /*vertical-align: middle;*/
+            /*height: 568px;*//*不能省*/
+        /*}*/
+
+        /*方案三*/
+        li {
+            display: -webkit-box;
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+        }
+
+        li img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id='canvas'>
+        <ul>
+            <li>
+                <img src='imgs/1.jpg' />
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
