@@ -29,6 +29,13 @@
             list-style: none;
         }
 
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
         /*垂直居中*/
         /*方案一*/
         /*li {*/
@@ -41,37 +48,188 @@
 
         /*方案二*/
         /*li {*/
-            /*display: table-cell;*//*ie8及以上支持*/
+            /*display: table-cell;ie8及以上支持*/
             /*vertical-align: middle;*/
-            /*height: 568px;*//*不能省*/
+            /*height: 568px;不能省*/
         /*}*/
 
         /*方案三*/
         li {
+            /*此处不用float而是用-webkit-transform:translate3d(0,0,0)＋position:absolute来实现，因为后面需要做动画*/
+            position: absolute;/*会造成内存耗用很大*/
+            /*以下三个属性是为了使内容居中*/
             display: -webkit-box;
             -webkit-box-pack: center;
             -webkit-box-align: center;
+
+            /*避免元素会在实际的手机当中闪烁*/
+            -webkit-backface-visibility: hidden;
         }
 
         li img {
             max-width: 100%;
             max-height: 100%;
         }
-
-        #canvas {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
     </style>
 </head>
 <body>
     <div id='canvas'>
-        <ul>
-            <li>
-                <img src='imgs/1.jpg' />
-            </li>
-        </ul>
+        <!--<ul>-->
+            <!--<li>-->
+                <!--<img width="320" src='imgs/1.jpg' />-->
+            <!--</li>-->
+        <!--</ul>-->
     </div>
+    <script type="text/javascript">
+        ;(function() {
+            //所有数据
+            var list = [{
+                height: 340,
+                src: 'imgs/1.jpg',
+                width: 230
+            },{
+                height: 371,
+                src: 'imgs/2.jpg',
+                width: 230
+            },{
+                height: 345,
+                src: 'imgs/3.jpg',
+                width: 230
+            },{
+                height: 320,
+                src: 'imgs/4.jpg',
+                width: 210
+            },{
+                height: 300,
+                src: 'imgs/5.jpg',
+                width: 233
+            },{
+                height: 354,
+                src: 'imgs/6.jpg',
+                width: 528
+            }];
+
+            function Slider(opt) {
+                var self = this;
+                self.list = list;
+                self.wrap = opt.dom;
+                self.wScaleH = window.innerWidth / window.innerHeight;
+                self.w = window.innerWidth;
+                self.h = window.innerHeight;
+                self.index = 0;//用于后面move
+                self.renderDOM();
+                self.bindDOM();
+            }
+
+            //生成对应的dom元素
+            Slider.prototype.renderDOM = function() {
+                var ulEle = document.createElement('ul'), i, liEle, self = this, item;
+                for (i = 0; i < self.list.length; i++) {
+                    item = self.list[i];
+                    liEle = document.createElement('li');
+                    liEle.style.width = self.w + 'px';
+                    liEle.style.height = self.h + 'px';
+                    liEle.style.webkitTransform = 'translate3d('+ (i * self.w) + 'px, 0, 0)';
+                    if (item.width > self.wScaleH) {
+                        liEle.innerHTML = '<img src="' + item['src'] + '" width=' + item.width + ' />';
+                    } else {
+                        liEle.innerHTML = '<img src="' + item['src'] + '" height=' + item.height + ' />';
+                    }
+                   ulEle.appendChild(liEle);
+                }
+                ulEle.style.width = self.w + 'px';
+                self.wrap.height = self.h + 'px';
+                self.wrap.appendChild(ulEle);
+                self.ulEle = ulEle;
+            }
+
+            //给对应的dom元素绑定对应事件
+            Slider.prototype.bindDOM = function() {
+                var self = this;
+                var lis = document.getElementsByTagName('li');
+                var startTime, endTime;
+
+                //做准备
+                function startHandler(evt) {
+                    startTime = +new Date();
+                    self.startX = evt.touches[0].pageX;
+                    self.offsetX = 0;//默认值
+                }
+
+                function moveHandler(evt) {
+                    evt.preventDefault();//不同浏览器（如UC浏览器等）可能有不同默认行为
+                    //更改前中右的translate3d的X值
+                    self.offsetX = evt.touches[0].pageX - self.startX;
+                    //console.log(self.offsetX);
+                    //此处如果index＝0，表示第一张，往右拖动图片，则虽然是第一张，但是仍然会有图片往右的效果，只是最终不会切换到－1位置
+                    for (var i = self.index - 1; i <= self.index + 1; i++) {
+                        lis[i] && (lis[i].style.webkitTransform = 'translate3d(' + ((i - self.index) * self.w + self.offsetX) + 'px, 0, 0)');
+                        //防止滑动因为有动画效果而有延迟
+                        lis[i] && (lis[i].style.webkitTransition = 'none');
+                    }
+
+                }
+
+                function endHandler(evt) {
+                    //时间用于判断是快操作还是慢操作，如果是快操作就可以直接是进入上一页或者下一页
+                    endTime = +new Date();
+                    var boundary = self.w / 6;
+                    if (endTime - startTime > 800) {
+                        if (self.offsetX >= boundary) {
+                            //进入上一页
+                            go('-1');
+
+                        } else if (self.offsetX < -boundary) {
+                            //进入下一页
+                            go('+1');
+
+                        } else {
+                            go('0');
+                        }
+                    } else {
+                         //快操作，优化：可以使得滑动更流畅
+                        if (self.offsetX > 50) {
+                            go('-1');
+                        } else if (self.offsetX < -50) {
+                            go('+1');
+                        } else {
+                            go('0');
+                        }
+                    }
+
+
+                    //slider.go(2);表示直接去到第二页
+                    function go(n) {
+                        var currIndex = 0;
+                        if (typeof n == 'number') {
+                            currIndex = self.index;
+                        } else if (typeof n == 'string') {
+                            currIndex = self.index + n * 1;
+                        }
+                        //防止超过边界
+                        currIndex >= lis.length ? (currIndex = lis.length - 1) : '';
+                        currIndex < 0 ? (currIndex = 0) : '';
+                        self.index = currIndex;
+                        //操作(前中后)
+                        lis[currIndex] && (lis[currIndex].style.webkitTransition = '-webkit-transform 0.2s ease-out');
+                        lis[currIndex + 1] && (lis[currIndex + 1].style.webkitTransition = '-webkit-transform 0.2s ease-out');
+                        lis[currIndex - 1] && (lis[currIndex - 1].style.webkitTransition = '-webkit-transform 0.2s ease-out');
+
+                        lis[currIndex] && (lis[currIndex].style.webkitTransform = 'translate3d(0, 0, 0)');//当前视野，所以为（0，0，0）
+                        lis[currIndex - 1] && (lis[currIndex - 1].style.webkitTransform = 'translate3d(' + (-self.w) + 'px, 0, 0)');
+                        lis[currIndex + 1] && (lis[currIndex + 1].style.webkitTransform = 'translate3d(' + (self.w) + 'px, 0, 0)');
+
+                    }
+
+                }
+                self.ulEle.addEventListener('touchstart', startHandler);
+                self.ulEle.addEventListener('touchmove', moveHandler);
+                self.ulEle.addEventListener('touchend', endHandler);
+            }
+
+            new Slider({dom: document.getElementById('canvas')});
+        })();
+
+    </script>
 </body>
 </html>
