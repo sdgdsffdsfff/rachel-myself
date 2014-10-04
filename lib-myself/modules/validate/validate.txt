@@ -1,0 +1,25 @@
+
+1. validate.add: 将每一条验证规则都转化为一个验证对象（每个表单元素都需要一个name属性，作为key值），且每个验证对象都绑定上对应的事件（error  success remoteBegin remoteEnd）.remote表示数据是远程获取到的（如ajax请求）
+
+
+需要给每一个表单都赋上name属性，作为key值，它对应的value是validateSingle
+
+op.singleHandler: 这是每一个表单都需要执行的，针对以上四个事件。用户自定义事件（可选，也有默认值）。如通过打钩
+
+
+改进：
+1. validate：是否应该有一个checkSuccessedList队列，这样checkAll时，只需要check()不在该队列中的对象
+2. 增加group的功能
+3. 允许规则是数组：多个字符串
+
+所有的selector最好都是id,这样方便唯一选中对应的form表单元素
+
+每条规则中都可以绑定onerror和onsuccess函数？？？
+
+
+
+
+例子需要覆盖的点：
+1. 点击“提交”按钮，有success/error函数，可以传递data
+2. updateMsg/addRules/removeRules
+3.
