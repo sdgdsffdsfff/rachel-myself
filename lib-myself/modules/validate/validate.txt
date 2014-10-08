@@ -14,7 +14,7 @@ op.singleHandler: 这是每一个表单都需要执行的，针对以上四个�
 
 所有的selector最好都是id,这样方便唯一选中对应的form表单元素
 
-每条规则中都可以绑定onerror和onsuccess函数？？？
+每条规则中都可以绑定onerror和onsuccess函数？？？暂时不支持，如果需要后续可以加到组件validate.js中
 
 
 
@@ -22,4 +22,4 @@ op.singleHandler: 这是每一个表单都需要执行的，针对以上四个�
 例子需要覆盖的点：
 1. 点击“提交”按钮，有success/error函数，可以传递data
 2. updateMsg/addRules/removeRules
-3.
+3. group存在和不存在的情况

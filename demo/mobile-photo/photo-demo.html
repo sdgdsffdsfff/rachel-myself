@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv='content-type' content='text/html, charset="utf-8'>
+        <!--对于不同设备，它的分辨率和尺寸不同，所以需要设置viewport-->
+        <meta name='viewport' content="width=device-width,initial-scale=1.0">
+        <title>移动web相册案例</title>
+        <!--css框架-->
+        <link href="animate.css" type="text/css" rel='stylesheet'>
+        <!--js框架，其中自己加入了touch.js文件-->
+        <script src='zpeto.js'></script>
+        <style type="text/css">
+            /*reset*/
+            ul, li, body, div, img {
+                padding: 0;
+                margin: 0;
+            }
+
+            #list-container {
+                width: 100%;
+                overflow: hidden;
+                background-color: black;
+            }
+
+            #list-container li {
+                border: 1px solid red;
+                float: left;
+            }
+
+            #detail-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+
+            }
+        </style>
+    </head>
+    <body>
+        <ul id='list-container'></ul>
+        <div id='detail-container'>
+            <img src='' />
+        </div>
+        <!--html5可以不用写type＝‘text/javascript’-->
+        <script>
+            ;(function() {
+                var list = $('#list-container');
+                var detail = $('#detail-container');
+                var count = 11;
+                var winW = $(window).width();
+                var winH = $(window).height();
+                list.width(winW);
+                list.height(winH);
+                render();
+
+                function render() {
+//                    此处我是用canvas来drawImage，而不是直接使用image标签。目的是在图片过多或者过大的时候，
+//                    浏览器本身渲染会比较慢（这样会在滑动的时候比较卡），但是如果我们使用canvas来加载图片，
+//                    则它是可以使用gpu硬件设备来渲染，速度更快
+                    var htmlCon = '';
+                    var border = 1;
+                    var marginright = 2;
+                    var rowCount = 4;//每行个数
+                    var w = Math.floor((winW - marginright * (rowCount - 1) - border * rowCount * 2) / rowCount);
+                    var mright = marginright;
+                    var mtop = marginright;
+                    for (var i = 1; i <= count; i++) {
+                        mright = (i % rowCount) ? marginright : 0;
+                        mtop = (i > rowCount) ? marginright : 0;
+                        htmlCon += '<li class="animated bounceIn" style="width: ' + w + 'px; height: ' + w + 'px;margin-right: ' + mright + 'px; margin-top: ' + mtop + 'px"><canvas id="cvs_' + i + '"></canvas></li>';
+                        loadMinImg(i);
+                    }
+                    function loadMinImg(index) {
+                        //使用image  Object
+                        var img = new Image();
+//                        var ele = $('#cvs_' + index);
+                        img.src = 'img/' + index + '.jpg';
+                        //onload是在src发送请求成功，且图片请求回来后触发的
+                        //onload不仅仅是在图片请求成功后才执行，它还有点像J.ready似的，在dom加载完毕以及全局执行的js执行完成后才触发。
+                        // 所以获取ele必须在onload中，否则在外面是获取不到该元素的
+                        img.onload = function() {
+                            //通过image Object的一个好处，是可以直接获取图片的大小
+                            var imgw = this.width;
+                            var imgh = this.height;
+                            if (imgw > w) {
+                                imgh = w / this.width * this.height;
+                                imgw = w;
+                            }
+                            if (imgh > w) {
+                                imgw = w / imgh * w;
+                                imgh = w;
+                            }
+                            var ele = $('#cvs_' + index);
+                            var context = ele[0].getContext('2d');
+                            context.width = imgw;
+                            context.height = imgh;
+                            context.drawImage(this,0, 0);
+                        }
+                    }
+                    list.html(htmlCon);
+                }
+
+
+
+
+            })();
+        </script>
+    </body>
+</html>

@@ -5,7 +5,7 @@
 	* 对应单个表单的验证对象
 	*/
 	function ValidateSingle(singleOpts) {
-		var op = {}, self = this, ruleBase, timer = null,
+		var op = {}, self = this, timer = null,
             errorId = -1;//error当为null时才表示验证通过,其他情况表示当前验证规则的小标[0~...]
 
 		init();
@@ -13,6 +13,7 @@
 			lib.inherit(self, lib.customEvent);
 			// init param
 			op = $.extend(op, singleOpts);
+
 			//根据表单元素类型的不同
 			var type = op.ele.attr('type');
 			//checkbox or radio evtName:click
@@ -47,11 +48,12 @@
         * 3. 即使多个验证规则，其中有一步是remote，那也没关系，因为1和2其实是独立的
         * */
 		function check() {
-            var rules = op.cklist, rule, ret, args;
+            var rules = op.rules, rule, ret, args;
             $.each(rules, function(i, v) {
                 rule = getRule(v.rule);
                 // 第一个参数一定是当前表单元素，后面为用户自定义传入的数据
                 args = v.data.unshift(op.ele);
+                //若rule是remote，则它一定先直接返回false，再在返回值中作处理
                 ret = rule.apply(self, args);
                 //未成功
                 if (!ret) {
@@ -65,6 +67,7 @@
             /*
             * 因为绑定的error/success等都在一个函数singleHandler中实现，所以需要传入事件类型
             * self：是ValidateSingle提供给外部调用的方法和属性
+            * 此时如果是群组表单，则还需要对success状态下，其他的表单元素进行验证
             * */
             self.trigger('success', ['success', self]);
             return true;
@@ -76,6 +79,7 @@
                 return rule;
             }
 		}
+
 
         /*
         * 获取当前状态
@@ -89,7 +93,7 @@
             if (errorId == null) {
                 status = {st: 'success'};
             } else {
-                status = {st: 'error', msg: op.chlist[errorId].msg}
+                status = {st: 'error', msg: op.rules[errorId].msg}
             }
             return status;
         }
@@ -103,14 +107,14 @@
         function updateMsg(ruleId, newMsg) {
             var i = 0, index = ruleId, ruleObj;
             if (typeof ruleId == 'string') {
-                for (; i < op.cklist.length; i++) {
-                    if (op.cklist[i].rule == ruleId) {
+                for (; i < op.rules.length; i++) {
+                    if (op.rules[i].rule == ruleId) {
                         index = i;
                         break;
                     }
                 }
             }
-            ruleObj = op.cklist[index];
+            ruleObj = op.rules[index];
             ruleObj && (ruleObj.msg = newMsg);
             //已被检查过
             (errorId == index) && self.trigger('error', ['error', self, newMsg]);
@@ -121,7 +125,7 @@
         * @param rules [Array] 需要添加的新规则
         * */
         function addRules(addRules) {
-            return (op.cklist = op.cklist.concat(addRules));
+            return (op.rules = op.rules.concat(addRules));
         }
 
         /*
@@ -130,12 +134,19 @@
         * @return 返回移除后的验证规则
         * */
         function removeRules(rmRuleIds) {
-            $.each(op.cklist, function(i, v) {
+            $.each(op.rules, function(i, v) {
                 if ($.inArray(i, rmRuleIds)) {
-                    delete op.cklist[i];
+                    delete op.rules[i];
                 }
             });
-            return op.cklist;
+            return op.rules;
+        }
+
+        /*
+        * 获取group
+        * */
+        function getGroup() {
+            return op.group;
         }
 
 
@@ -146,7 +157,8 @@
             getStatus: getStatus,
             updateMsg: updateMsg,
             addRules: addRules,
-            removeRules: removeRules
+            removeRules: removeRules,
+            getGroup: getGroup
 		}
 
 	}
@@ -156,7 +168,9 @@
 	/*
 	* 所有表单验证的总对象Validate
 	* @param cklists[数组对象] 多个需要验证的表单规则集合
-	*        每个对象字段：selector[string]；checkList：[array]
+	*        selector [string],
+	*        group [Array]
+	*        checkList：[Array]
 	*        checklist其中的每个对象包含字段：
 				{
 					rule: 验证规则（自定义function或者string）;
@@ -274,31 +288,59 @@
 
 		/*
 		* 将用户自定义的表单验证规则实例化为对应的ValidateSingle对象
-		* @param cklist[obj] 
+		* @param cklist[obj]  {
+		*   selector,
+		*   group,
+		*   [rules Array]
+		* }
 		*/
 		function instanceObj(cklist) {
 			var ele = $(cklist.selector), type, sinOpts, name;
 			if (ele && ele.length && cklist.checklist.length) {
 				type = ele.attr('type');
-				sinOpts = {
+                name = ele.attr('name');
+                sinOpts = {
 					ele: ele,
-					cklist: cklist,
+                    name: name,
+                    group: cklist.group,
+					rules: cklist.checklist,
 					ruleBase: (type == 'checkbox' || type == 'radio') ? rulesCkbox : rulesText,
 					defEvt: defEvt
 				};
-				name = ele.attr('name'); 
 				singleList[name] = new ValidateSingle(sinOpts);
 				singleList[name].on('success error remoteBegin remoteEnd', function(evtType, singleObj, msg) {
-					op.singleHandler(ele, evtType, singleObj, msg);
+                    groupHandler(ele, evtType, singleObj, msg);
 				});
 			}
 		}
 
+        /*
+        * 针对群组进行处理，因为可能多个表单元素共用一个错误提示信息
+        * */
+        function groupHandler(ele, evtType, singleObj, msg) {
+            var group = singleObj.getGroup(), res = true, reStatus;
+            if (group && evtType == 'success') {
+                $.each(group, function(i, name) {
+                    var status = singleList[name].getStatus()['st'];
+                    if (status == 'error') {
+                        singleList[name].check();
+                        reStatus = singleList[name].getStatus();
+                        if (reStatus['st'] == 'error') {
+                            evtType = 'error';
+                            msg = reStatus['msg'];
+                            return;
+                        }
+                    }
+                });
+            }
+            op.singleHandler(ele, evtType, singleObj, msg);
+        }
+
 		/*
 		* 一次性检测所有表单是否验证成功
-		* 点击“提交”按钮，在提交之前是可以指定error和success函数
+		* 点击“提交”按钮，在提交之前是可以指定bfSberror和bfSbSuccess函数
 		* @param isSkip[boolean] 是否不验证事先指定的skipList
-		* @param evtData[array] 执行success或error时所需数据
+		* @param evtData[Array] 执行bfSbSuccess或bfSberror时所需数据
 		*/
 		function checkAll(isSkip, evtData) {
             var skip = isSkip ? skipList : [], i, ret = true;
@@ -309,15 +351,18 @@
                     }
                     //验证通过的就不需要再验证了
                     if (singleList[i].getStatus().st == 'error') {
-                        singleList[i].check() ? '' : ret = false;
+                        if (!singleList[i].check()) {
+                            ret = false;
+                            break;
+                        }
                     }
 
                 }
             }
             if (ret) {
-                self.trigger('success');
+                self.trigger('bfSbSuccess', evtData);
             } else {
-                self.trigger('error');
+                self.trigger('bfSberror', evtData);
             }
             return ret;
 
