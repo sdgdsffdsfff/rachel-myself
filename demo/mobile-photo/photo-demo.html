@@ -20,6 +20,7 @@
                 width: 100%;
                 overflow: hidden;
                 background-color: black;
+                list-style: none;
             }
 
             #list-container li {
@@ -32,20 +33,22 @@
                 left: 0;
                 top: 0;
                 width: 100%;
-
+                overflow: hidden;
+                background: black;
             }
         </style>
     </head>
     <body>
         <ul id='list-container'></ul>
         <div id='detail-container'>
-            <img src='' />
+            <img id='maxImg' />
         </div>
         <!--html5可以不用写type＝‘text/javascript’-->
         <script>
             ;(function() {
                 var list = $('#list-container');
                 var detail = $('#detail-container');
+                var maxImg = $('#maxImg');
                 var count = 11;
                 var winW = $(window).width();
                 var winH = $(window).height();
@@ -54,9 +57,9 @@
                 render();
 
                 function render() {
-//                    此处我是用canvas来drawImage，而不是直接使用image标签。目的是在图片过多或者过大的时候，
-//                    浏览器本身渲染会比较慢（这样会在滑动的时候比较卡），但是如果我们使用canvas来加载图片，
-//                    则它是可以使用gpu硬件设备来渲染，速度更快
+                    // 此处我是用canvas来drawImage，而不是直接使用image标签。目的是在图片过多或者过大的时候，
+                    // 浏览器本身渲染会比较慢（这样会在滑动的时候比较卡），但是如果我们使用canvas来加载图片，
+                    // 则它是可以使用gpu硬件设备来渲染，速度更快
                     var htmlCon = '';
                     var border = 1;
                     var marginright = 2;
@@ -67,7 +70,7 @@
                     for (var i = 1; i <= count; i++) {
                         mright = (i % rowCount) ? marginright : 0;
                         mtop = (i > rowCount) ? marginright : 0;
-                        htmlCon += '<li class="animated bounceIn" style="width: ' + w + 'px; height: ' + w + 'px;margin-right: ' + mright + 'px; margin-top: ' + mtop + 'px"><canvas id="cvs_' + i + '"></canvas></li>';
+                        htmlCon += '<li data-id=' + i + ' class="animated bounceIn" style="width: ' + w + 'px; height: ' + w + 'px;margin-right: ' + mright + 'px; margin-top: ' + mtop + 'px"><canvas id="cvs_' + i + '"></canvas></li>';
                         loadMinImg(i);
                     }
                     function loadMinImg(index) {
@@ -94,14 +97,91 @@
                             var context = ele[0].getContext('2d');
                             context.width = imgw;
                             context.height = imgh;
-                            context.drawImage(this,0, 0);
+                            // context.drawImage(this,0, 0); 
+                            // 传入imgw,和imgh，则可以缩放图片
+                            context.drawImage(this,0, 0, imgw, imgh);
                         }
                     }
                     list.html(htmlCon);
                 }
 
 
+                //事件委托
+                list.delegate('li', 'tap', function() {
+                    var id = $(this).attr('data-id');
+                    loadMaxImg(id);
+                });
+                //点击大图
+                detail.tap(function() {
+                    $(this).hide();
+                });
+                //向左滑动大图
+                var currMaxId = 1;
+                detail.swipeRight(function() {
+                    currMaxId--;
+                    currMaxId < 1 ? (currMaxId = 1) : '';
+                    //如果maxImg添加的class一直有的话，就不会出现动画的效果，所以在动画结束之后应该remove
+                    //这样在下次的时候，就不会有该className
+                    maxImg.on('webkitAnimationEnd', function() {
+                        $(this).removeClass('animated bounceInLeft');
+                        //将webkitAnimationEnd事件移除
+                        arguments.callee = null;
+                    });
+                    loadMaxImg(currMaxId, function() {
+                        maxImg.addClass('animated bounceInLeft');
+                    });
+                });
 
+                //向右滑动大图
+                detail.swipeLeft(function() {
+                    currMaxId++;
+                    currMaxId > count ? (currMaxId = count) : '';
+                    loadMaxImg(currMaxId, function() {
+                         maxImg.addClass('animated bounceInRight');
+                    });
+
+                    maxImg.on('webkitAnimationEnd', function() {
+                        $(this).removeClass('animated bounceInRight');
+                        //将webkitAnimationEnd事件移除
+                        arguments.callee = null;
+                    })
+                });
+
+                //加载对应的大图
+                function loadMaxImg(index, callback) {
+                    var imgsrc = 'img/' + index + '.large.jpg';
+                    var imgObj = new Image();//使用image Object，此处使用的目的只是为了获取它的真实图片大小
+                    //请求图片，成功后可以直接获取图片的大小
+                    imgObj.src = imgsrc;
+                    
+                    imgObj.onload = function() {
+                        //缩放图片
+                        var realW = this.width;
+                        var realH = this.height;
+                        if (realW > winW) {
+                            realH = (this.height / this.width) * winW;
+                            realW = winW;
+                        }
+                        if (realH > winH) {
+                            realH = winH;
+                            realW = (this.width / this.height) * winH;
+                        }
+                        var paddleft = Math.floor((winW - realW) / 2);
+                        var paddTop = Math.floor((winH - realH) / 2);
+                        maxImg.attr('src', imgsrc).css({
+                            'width': realW,
+                            'height': realH,
+                            'padding-left': paddleft,
+                            'padding-top': paddTop
+                        });
+                        $('#detail-container').css({
+                            'width': winW,
+                            'height': winH
+                        }).show();
+                        //callback主要是用于处理动画效果
+                        callback && callback();
+                    }
+                }
 
             })();
         </script>
