@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	    <title>文件上传的测试案例</title>
+	    <script src='../../jquery-1.11.1.js'></script>
+	    <script src='../../base.js'></script>
+	    <script src='./fileupload.js'></script>
+	    <style type="text/css">
+			#fileBtn {
+				width: 100px;
+				height: 75px; 
+				opacity: 0;
+				filter: alpha(opacity=0);
+				cursor: pointer;
+			}
+
+			.fileContainer {
+				width: 100px;
+				height: 75px;
+				border: 1px solid #ccc;
+
+			}
+	    </style>
+	</head>
+	<body>
+		<p>点击下图，上传图片</p>
+		<div class="fileContainer">
+			<input type="file" accept="img/png,img/gif,img/jpeg" id='fileBtn' />
+		</div>
+		<script type="text/javascript">
+		;(function() {
+			$('#fileBtn').on('change', function() {
+				var mfs_url = "http://upd1.ajkimg.com/upload-haozu";
+				var ret_url = "http://d.anjuke.com/rent/imageupload/";
+				var fileupload = new lib.fileUpload({
+					fileUrl: mfs_url,
+					retUrl: ret_url,
+					retKey: 'rt',
+					fileEleId: 'fileBtn',
+					dataType: 'json', 
+					onSuccess: function(data) {
+						if (data.status == 'ok') {
+							processSuccess(data);
+						}
+					},
+
+					//因为服务器请求没数据或者请求失败
+					onFail: function() {
+						alert('上传失败！');
+					},
+
+					onComplete: function(data) {
+						alert('请求成功！');
+					}
+				});
+
+				function processSuccess(data) {
+					var host = data.image.host;
+					var hash = data.image.hash;
+					var url = buildImgUrl(host, hash);
+					var img = '<img src="' + url + '">';
+					var head = document.head || document.getElementsByTagName('head')[0];
+					head.appendChild(img);
+				}
+
+				function buildImgUrl (host, hash) {
+			        return 'http://pic' + host + '.ajkimg.com/display/hz/' + hash + '/' + '100x75.jpg';
+			    }
+
+			});
+		})();
+
+	
+		</script>
+	</body>
+</html>
