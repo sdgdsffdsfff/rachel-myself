@@ -27,7 +27,6 @@
 
  		function init() {
 			//继承base.js中自定义事件
-        	lib.inherit(self, lib.customEvent);
 			var options = $.extend({}, defOP, opts);
 			var t = +new Date().getTime();
 			var $body = $(document.body || document.getElementsByTagName('body')[0]);
@@ -39,11 +38,7 @@
 				$form.append('<input type="hidden" name="' + options.retKey + '" value="' + options.retUrl + '">');
 			}
 			//需要编码才能文件上传成功
-			if ($form[0].encoding) {
-				$form.attr('encoding', 'multipart/form-data');
-			} else {
-				$form.attr('enctype', 'multipart/form-data');
-			}
+			$form.attr('enctype', 'multipart/form-data');
 			$form[0].submit();
 			//拿请求的结果
 			$iframe.load(function() {
@@ -52,10 +47,10 @@
 			});
 			//回来的数据会自动放置在iframe中，直接从iframe中取即可
 			function processIframeData() {
-				var $ifrm = $('#' + iframeId);
-				var data;
-				if ($ifrm.contentWindow) {
-					var body = $ifrm.contentWindow.document.body;
+				var ifrm = $('#' + iframeId)[0];
+				var data = {};
+				if (ifrm.contentWindow) {
+					var body = ifrm.contentWindow.document.body;
 					data = body ? body.innerHTML : '';
 					data = analyzeData(data, options.dataType);
 				}
@@ -83,7 +78,7 @@
 		function analyzeData(data, type) {
 			switch(type) {
 				case 'json':
-					data = eval('(data=' + data + ')');
+					data = eval('(' + data + ')');//json字符串
 					break;
 				default:
 
@@ -111,7 +106,7 @@
 		  @return  返回的是jquery元素
 		*/
 		function createIframe(iframeId, $body) {
-			var htmCon = '<iframe name="' + iframeId + '" id="' + iframeId + '"></iframe>';
+			var htmCon = '<iframe name="' + iframeId + '" id="' + iframeId + '" style="position: absolute; left: -9000px; top: -9000px;"></iframe>';
 			$body.append(htmCon);
 			return $('#' + iframeId);
 		}
