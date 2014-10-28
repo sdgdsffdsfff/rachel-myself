@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>get方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">get方式跨域</p>
+		<p><input type="button" value="get方式跨域" id='sendGet'></p>
+		<pre>
+			
+		</pre>
+		<script type="text/javascript">
+			//get方式跨域
+			;(function() {
+				var num = 0;
+				//get方式的模拟
+				$('#sendGet').on('click', function() {
+					//hosts中配置的域名www.a.com（对应ip为127.0.0.1）
+					var sendUrl = 'http://www.a.com/my-cross/get.php';
+					getJsonp({
+						url: sendUrl,
+						async: false,
+						data: {num: num},
+						callback: 'execCallback'
+					});
+				});
+
+				function getJsonp(opts) {
+					var url = opts.url, i = 0;
+					url = ~url.indexOf('?') ? url : url + '?'; 
+					for (var key in opts.data) {
+						if (opts.data.hasOwnProperty(key)) {
+							url += key + '=' + opts.data[key] + '&'; 
+						}
+					}
+					url += 'callback=' + opts.callback;
+					var script = document.createElement('script');
+					script.setAttribute('src', url);
+					opts.async ? (script.async = opts.async) : '';
+					var head = document.head || document.getElementsByTagName('head')[0];
+					head.insertBefore(script, head.firstChild);
+				}
+
+				//callback
+				function execCallback(data) {
+					alert(data.msg);
+				}
+				window.execCallback = execCallback;//必不可少
+			})();
+
+
+		</script>
+	</body>
+</html>

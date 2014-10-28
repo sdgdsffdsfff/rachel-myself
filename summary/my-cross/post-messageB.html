@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>postMessage方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">postMessage方式跨域</p>
+		<p><input type="button" value="post方式跨域" id='sendGet'></p>
+		<p>BB, 您发送的消息为：<input type="text" value='' id='sendContent'><input type='button' id='sendMsg' value='发送消息'></p>
+		<p>BB, 从对方接收的消息为：<span id='showContent' style='border: 1px solid red;'></span></p>
+		<script type="text/javascript">
+			//postMessage方式跨域
+			;(function() {
+				//接收消息(一般给window绑定)
+				//此处绑定message，最好用原生的，否则获得e是jquery EVent，则不会有e.source
+				var sourceW, origin;
+				window.addEventListener('message', function(e) {
+					//接收的数据即为e.data
+					$('#showContent').html(e.data);
+					//接收完消息给对方回复消息
+					/*
+					* e.source是指对方的window
+					* e.origin是指对方的域名
+					*/
+					sourceW = e.source;
+					origin = e.origin;
+				});
+				$('#sendMsg').on('click', function(e) {
+					var val = $('#sendContent').val();
+					sourceW.postMessage(val, origin);
+				})
+			})();
+
+		</script>
+	</body>
+</html>

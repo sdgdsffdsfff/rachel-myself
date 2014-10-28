@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>postMessage方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+			#transmitIframe {
+				width: 700px;
+				height: 500px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">postMessage方式跨域</p>
+		<p><input type="button" value="post方式跨域" id='sendGet'></p>
+		<p>AA, 您发送的消息为：<input type="text" value='' id='sendContent'><input type='button' id='sendMsg' value='发送消息'></p>
+		<p>AA, 从对方接收的消息为：<span id='showContent' style='border: 1px solid red;'></span></p>
+		<iframe src="http://www.b.com/my-cross/post-messageB.html" id='transmitIframe'></iframe>
+		<script type="text/javascript">
+			//postMessage方式跨域
+			// 注意该文件运行时域名使用localhost
+			;(function() {
+				var iframe = document.getElementById('transmitIframe');
+				$('#sendMsg').on('click', function() {
+					var val = $('#sendContent').val();
+					// iframe.contentWindow.postMessage(val, '*');
+					iframe.contentWindow.postMessage(val, 'http://www.b.com');//后面用*或者使用具体的域名都可以
+
+				});
+				//接收消息(一般给window绑定)
+				window.addEventListener('message', function(e) {
+					//接收的数据即为e.data
+					$('#showContent').html(e.data);
+				});
+			})();
+
+		</script>
+	</body>
+</html>

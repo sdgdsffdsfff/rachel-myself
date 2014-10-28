@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <title>a.com</title>
+    </head>
+    <body>
+        <div id="Div1">A.com/a.html</div>
+        <input id="txt_msg" type="text" />
+        <input id="Button1" type="button" value="向b.com/b.html发送一条消息"/>
+        <div id="div_msg">
+        </div>
+        <iframe width="800" height="400" id="mainFrame" src="http://www.b.com/my-cross/proxy/b.html">
+        </iframe>
+        <script type="text/javascript">
+            var proxyWin = null;
+            function showMsg(msg) {
+                document.getElementById("div_msg").innerHTML = msg;
+            }
+            function getMessage(data) {
+                showMsg("messageForm b.html11 to ProxyWin:" + data);
+            }
+            function sendMessage(data) {
+                if (null != proxyWin) {
+                    proxyWin.getMessage(data);
+                }
+            }
+            document.getElementById('Button1').onclick = function(e) {
+                sendMessage(document.getElementById('txt_msg').value);
+            }
+        </script>
+    </body>
+    </html>

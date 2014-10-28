@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>iframe-domain方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+			#transmitIframe {
+				width: 700px;
+				height: 500px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">iframe-domain方式跨域</p>
+		<p>AA, 您想要发送给对方的消息为：<input type="text" value='' id='sendContent'></p>
+		<p>AA, 从对方获取到的消息为：<span id='showContent' style='border: 1px solid red;'></span><input type='button' id='getMsg' value='获取消息'></p>
+		<iframe src="http://www.b.com/my-cross/iframe-domainB.html" id='transmitIframe'></iframe>
+		<script type="text/javascript">
+			//postMessage方式跨域
+			// 注意该文件运行时域名使用blog.b.com
+			;(function() {
+				document.domain = 'b.com';
+				var ifr = $('#transmitIframe')[0];
+				$('#getMsg').on('click', function() {
+					var val = ifr.contentWindow.document.getElementById('sendContent').value;
+					$('#showContent').html(val);
+				});
+			})();
+
+		</script>
+	</body>
+</html>

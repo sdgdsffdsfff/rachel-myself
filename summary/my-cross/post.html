@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>post方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">post方式跨域</p>
+		<p><input type="button" value="post方式跨域" id='sendGet'></p>
+		<pre>
+			post方式跨域的应用场景：比方说我们发送soj到服务器，一般就只需要提交数据给后端，而不需要从后端拿数据（即不会有callback），不用get是因为有时候数据量比较大的时候会被截断。如果当真我们需要从后端拿数据（即post需要有callback，那一般的做法是跨域让后端做，我们直接调用同域的接口即可）
+		</pre>
+		<script type="text/javascript">
+			//post方式跨域
+			;(function() {
+				var num = 0;
+				//post方式的模拟
+				$('#sendGet').on('click', function() {
+					//hosts中配置的域名www.a.com（对应ip为127.0.0.1）
+					var sendUrl = 'http://localhost/my-cross/post.php';
+					postJsonp({
+						url: sendUrl,
+						data: {num: num},
+						callback: 'postCallback'
+					});
+				});
+
+				function postCallback(data) {
+					alert(data.msg);
+				}
+				window.postCallback = postCallback;
+
+				//post跨域(动态iframe+form)，可以参考jockjs中postJSONP，考虑了timeout等错误情况
+				function postJsonp(opts) {
+				     var container = document.createElement('div');
+				     var form = document.createElement('form');
+				     var inputs = [];
+				     var iframeName = 'F_' + (+new Date().getTime());
+				     //将post的data数据以及callback作为form中的表单
+				     for (var key in opts.data) {
+				     	 inputs.push('<input type="hidden" name="' + key + '" value="' + opts.data[key] + '">');
+				     }
+				     inputs.push('<input type="hidden" name="callback" value="' + opts.callback + '">');
+				     form.innerHTML = inputs.join('');
+				     form.action = opts.url;
+				     form.method = 'post';
+				     form.target = iframeName;//在指定的iframe框架中打开
+				     container.innerHTML = '<iframe id="' + iframeName + '" name="' + iframeName + '">';
+				     container.appendChild(form);
+				     var head = document.head || document.getElementsByTagName('head')[0];
+				     head.insertBefore(container, head.firstChild);
+				     //提交post请求
+				     form.submit();
+				     domLoaded(document.getElementById(iframeName), container);
+				}
+
+				function domLoaded(iframe, container) {
+					//ie只支持onreadystatechange，浏览器兼容性
+					iframe.onload = iframe.onreadystatechange = function() {
+						console.log('hbl')
+						setTimeout(function() {
+							//deleteDom(iframe, container);
+						}, 500);
+					}
+				}
+
+				//删除dom(在请求回来以后)
+				function deleteDom(iframe, container) {
+					var ele = container || iframe;
+					var head = document.head || document.getElementsByTagName('head')[0];
+					head.removeChild(ele);
+					ele = undefined;
+				}
+			})();
+
+
+		</script>
+	</body>
+</html>

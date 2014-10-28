@@ -1,0 +1,1 @@
+关于文件上传的案例，代码在rachel-myself/lib-myself/modules/fileupload中。运用了post跨域以及后端跨域，以便让前端可以拿到post的结果。如是否上传成功

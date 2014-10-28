@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+			<!-- <meta http-equiv="Access-Control-Allow-Origin" content="*"> -->
+
+		<meta http-equiv='Content-Type' content="text/html;charset=utf-8">
+		<title>Access-Control-Allow-Origin方式跨域</title>
+		<style type="text/css">
+			.title {
+				font-size: 20px;
+			}
+
+		</style>
+		<script type="text/javascript" src='./jockjs.js'></script>
+		<script type="text/javascript" src='./jquery-1.8.3.js'></script>
+	</head>
+	<body>
+		<p class="title">Access-Control-Allow-Origin方式跨域</p>
+		<p><input type="button" value="Access-Control-Allow-Origin方式跨域" id='sendGet'></p>
+		<pre>
+			
+		</pre>
+		<script type="text/javascript">
+			//Access-Control-Allow-Origin方式跨域
+			;(function() {
+				// J.g('sendGet').on('click', function() { alert('2323')
+					var num = 0;
+					var sendurl = 'http://www.a.com/my-cross/access-control-allow-origin.php';
+					// var sendurl = 'http://www.a.com/my-cross/access-origin.html';//测试未成功
+					alert('opop');
+					J.get({
+						url: sendurl,
+						//data: {num: num},
+						onSuccess: function(data) {
+							alert(data.msg);
+							alert('11111');
+						}
+					})
+				// });
+			})();
+
+
+		</script>
+	</body>
+</html>

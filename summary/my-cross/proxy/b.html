@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>b.com</title>
+</head>
+<body>
+    <div id="Div1">B.com/b.html</div>
+    <input id="txt_msg" type="text" />
+    <input id="Button1" type="button" value="向A.com/a.html发送一条消息" />
+    <div id="div_msg">
+    </div>
+    <iframe id="proxy" name="proxy" style="width: 600px; height: 300px"></iframe>
+    <script type="text/javascript">
+        function showMsg(msg) {
+            document.getElementById("div_msg").innerHTML = msg;
+        }
+        function sendMessage(data) {
+            var proxy = document.getElementById("proxy");
+            proxy.src="http://www.a.com/my-cross/proxy/proxy.html?data=" + data;
+        }
+        function connect() {
+            sendMessage("connect");
+        }
+        function getMessage(data) {
+            showMsg("messageForm a.html to ProxyWi n:" + data);
+            connect();
+        }
+
+        document.getElementById('Button1').onclick = function() {
+            sendMessage(document.getElementById('txt_msg').value);
+        }
+ console.log('457www')
+        connect(); // 页面一加载，就执行一次连接
+    </script>
+</body>
+</html>
