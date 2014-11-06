@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>jockjs-test</title>
+	</head>
+	<body data-page='speed1-page'>
+		<script type="text/javascript">
+		//‘document.registerElement’返回一个构造函数
+		// document.registerElement('my-ele');
+		// var ele = document.createElement('my-ele');
+		// ele.innerHTML = '<span>I am an example!</span>'
+		// document.body.appendChild(ele);
+		// console.log(ele);
+
+
+		document.registerElement('my-ele', {
+			prototype: Object.create(HTMLElement.prototype, {
+				createdCallback: {
+					value: function() {
+						this.innerHTML = '<h1>ELEMENT CREATED</h1>';
+					}
+				}
+			})
+		});
+		var ele = document.createElement('my-ele');
+		// ele.innerHTML = '<span>I am an example!</span>'
+		document.body.appendChild(ele);
+		console.log(ele);
+		</script>
+	</body>
+</html>
