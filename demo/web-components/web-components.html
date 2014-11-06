@@ -19,13 +19,17 @@
 				//我们定义了createdCallback方法，在每次声明实例时调用。你同样可以有选择性的定义attributeChangedCallback、 enteredViewCallback 和leftViewCallback等方法。
 				createdCallback: {
 					value: function() {
-						this.innerHTML = '<h1>ELEMENT CREATED</h1>';
+						//this.innerHTML = '<h1>ELEMENT CREATED</h1>';
+						//这里使用创建Shadow Root 方法替代了直接修改页面。
+						var shadow = this.createShadowRoot();
+						//shadow.innerHTML = '<h1>SHADOW DOM!</h1>'
+						shadow.innerHTML = '<style>span {color: green}</style>' + 
+							'<span>i am green</span>'
 					}
 				}
 			})
 		});
 		var ele = document.createElement('my-ele');
-		// ele.innerHTML = '<span>I am an example!</span>'
 		document.body.appendChild(ele);
 		console.log(ele);
 		</script>
