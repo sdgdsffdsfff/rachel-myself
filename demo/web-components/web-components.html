@@ -16,6 +16,7 @@
 
 		document.registerElement('my-ele', {
 			prototype: Object.create(HTMLElement.prototype, {
+				//我们定义了createdCallback方法，在每次声明实例时调用。你同样可以有选择性的定义attributeChangedCallback、 enteredViewCallback 和leftViewCallback等方法。
 				createdCallback: {
 					value: function() {
 						this.innerHTML = '<h1>ELEMENT CREATED</h1>';
