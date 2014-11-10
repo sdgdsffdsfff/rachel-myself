@@ -1,6 +1,7 @@
 ####cookieParser主要是用来解析cookie的，包括signedCookie
 使用该中间件以后，我们就可以直接用req.cookies.xxx来获取对应cookie的name为xxx的值了
 
+
 当我们使用cookirParser(secret)中间件以后，这个对象默认是{}，否则包含了用户代理传过来的签名后的cookie。签名后的cookies是被放在一个单独的对象里的，即req.signedCookies,使用它是因为故意攻击者是会很简单的替换掉req.cookie的值。不过我们签名的cookie并不代表它是隐藏的或者加密的，它只是做了简单的防止篡改cookie的操作而已。
 
 签名cookie使用如下：
