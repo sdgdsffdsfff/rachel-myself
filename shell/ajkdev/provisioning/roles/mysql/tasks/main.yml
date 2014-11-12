@@ -1,0 +1,9 @@
+---
+
+- name: install libmysqlclient-dev
+  apt: pkg=libmysqlclient-dev state=present
+  sudo: yes
+
+- name: "ln libmysqlclient"
+  shell: ln -s /usr/lib/x86_64-linux-gnu/libmysqlclient.so /usr/lib/libmysqlclient.so
+

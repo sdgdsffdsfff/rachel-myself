@@ -1,0 +1,25 @@
+---
+- name: install common
+  hosts: my
+  remote_user: root
+  roles:
+    - common
+
+- name: install mysql
+  hosts: my
+  remote_user: root
+  roles:
+    - mysql
+
+- name: install php5
+  hosts: my
+  remote_user: root
+  roles:
+    - php5
+
+- name: install nginx
+  hosts: my
+  remote_user: root
+  roles:
+    - nginx
+

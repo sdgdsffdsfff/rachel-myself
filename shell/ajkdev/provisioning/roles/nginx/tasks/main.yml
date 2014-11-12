@@ -1,0 +1,24 @@
+---
+- name: "install nginx"
+  apt: pkg=nginx
+       state=present
+
+- name: remove default nginx site
+  action: file path=/etc/nginx/sites-enabled/default state=absent
+
+- name: write fastcgi_params
+  action: template src=fastcgi_params dest=/etc/nginx/fastcgi_params
+
+- name: write nginx.conf
+  action: template src=nginx.conf dest=/etc/nginx/nginx.conf
+
+- name: write all.conf
+  action: template src=all.conf dest=/etc/nginx/conf.d/all.conf
+
+- name: "change libxml2.so from /usr/local/lib to /usr/lib"
+  shell: mv /usr/local/lib/libxml2.so* /tmp;
+
+- name: restart nginx
+  action: service name=nginx state=restarted
+
+

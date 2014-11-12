@@ -1,0 +1,79 @@
+# ---
+# - name: install php needed packages
+#   action: apt pkg=$item state=installed
+#   with_items:
+#     - build-essential
+#     - libxml2-dev
+#     - libcurl4-gnutls-dev
+
+- name: "install zmq"
+  shell: cd /home/www/softs;
+         wget http://soft.dev.aifang.com/ansible/zeromq-2.2.0.tar.gz;
+         tar zxvf zeromq-2.2.0.tar.gz;
+         cd zeromq-2.2.0;
+         ./configure --prefix=/opt/local/zeromq-2.2.0;
+         make && make install;
+
+- name: "install rabbitmq"
+  shell: cd /home/www/softs;
+         git clone git://github.com/alanxz/rabbitmq-c.git;
+         cd rabbitmq-c;
+         git submodule init;
+         git submodule update;
+         autoreconf -i && ./configure;
+         make && make install;
+
+- name: "install php"
+  shell: cd /home/www/softs;
+         wget http://soft.dev.aifang.com/ansible/php-5.3.17.tar.gz;
+         tar zxvf php-5.3.17.tar.gz;
+         cd php-5.3.17;
+         ./configure --prefix=/opt/local/php --enable-fpm --with-mysql --with-pdo-mysql --with-curl --with-zlib --with-freetype-dir=/usr/include/freetype2 --with-jpeg-dir --with-png-dir --enable-bcmath;
+         make && make install;
+
+- name: "mv extensions"
+  shell: mkdir -p /opt/local/php/lib/php/extensions; 
+         mv /home/www/workspace/no-debug-non-zts-20090626 /opt/local/php/lib/php/extensions/;
+
+
+#php-fpm
+- name: "replace php-fpm.conf"
+  template: src=php-fpm.conf
+            dest=/opt/local/php/etc/php-fpm.conf
+            owner=root
+            group=root
+            mode=0644
+
+- name: "create /opt/local/php/lib"
+  file: path=/opt/local/php/lib
+        state=directory
+        owner=root
+        group=root
+        mode=0755
+
+- name: "replace php.ini"
+  template: src=php.ini 
+            dest=/opt/local/php/lib/php.ini
+            owner=root
+            group=root
+            mode=0644
+
+- name: init php-fpm service
+  template: src=php-fpm
+            dest=/etc/init.d/php-fpm
+            owner=root
+            group=root
+            mode=755
+
+- name: "start php-fpm"
+  shell: nohup /opt/local/php/sbin/php-fpm &
+
+#- name: "install chkconfig"
+#  apt: pkg=chkconfig
+#       state=present
+
+- name: "add php-fpm to restart service"
+  shell: ln -s /opt/lib/insserv/insserv /sbin/insserv;
+#         chkconfig php-fpm on;
+
+

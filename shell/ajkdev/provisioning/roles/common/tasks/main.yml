@@ -1,0 +1,97 @@
+---
+
+- name: "update apt cache"
+  apt: update_cache=yes
+
+- name: "install svn"
+  apt: pkg=subversion
+       state=present
+
+- name: "install autoconf"
+  apt: pkg=autoconf
+       state=present
+
+- name: "install libzmq-dev"
+  apt: pkg=libzmq-dev
+       state=present
+
+- name: "install libcurl4-gnutls-dev"
+  apt: pkg=libcurl4-gnutls-dev
+       state=present
+
+- name: "install g++"
+  apt: pkg=g++
+       state=present
+
+- name: "install unzip"
+  apt: pkg=unzip
+       state=present
+
+- name: "install make"
+  apt: pkg=make
+       state=present
+
+- name: "install libxml2-dev"
+  shell: cd /home/www/softs;
+         wget http://soft.dev.aifang.com/ansible/libxml2-2.7.2.tar.gz;
+         tar zxvf libxml2-2.7.2.tar.gz;
+         cd libxml2-2.7.2;
+         ./configure; make && make install;
+
+- name: "install libpcre++-dev"
+  apt: pkg=libpcre++-dev
+       state=present
+
+- name: "install libjpeg8-dev"
+  apt: pkg=libjpeg8-dev
+       state=present
+
+- name: "install libpng12-dev"
+  apt: pkg=libpng12-dev
+       state=present
+
+- name: "install libfreetype6-dev"
+  apt: pkg=libfreetype6-dev
+       state=present
+
+- name: "install uuid-dev"
+  apt: pkg=uuid-dev
+       state=present
+
+- name: "install libtool"
+  apt: pkg=libtool
+       state=present
+
+- name: "install libncurses5-dev"
+  apt: pkg=libncurses5-dev
+       state=present
+
+- name: "install re2c"
+  apt: pkg=re2c
+       state=present
+
+- name: "install subversion"
+  apt: pkg=subversion
+       state=present
+
+- name: "install cmake"
+  apt: pkg=cmake
+       state=present
+
+- name: "install build-essential"
+  apt: pkg=build-essential
+       state=present
+
+- name: "install libpq-dev"
+  apt: pkg=libpq-dev
+       state=present
+
+- name: "install zlib1g-dev"
+  apt: pkg=zlib1g-dev
+       state=present
+
+- name: "install curl"
+  apt: pkg=curl
+       state=present
+
+
