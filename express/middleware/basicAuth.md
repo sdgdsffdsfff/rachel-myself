@@ -1,3 +1,41 @@
+####Basic中间件
+描述：basic认证中间件，是用来实现简单的用户密码登陆，当用户和密码验证通过后，可以通过一个callback方法继续执行。
+
+同步验证：
+```javascript
+connect().use(connect.basicAuth(function(user, pass){
+    return 'tj' == user && 'wahoo' == pass;
+}));
+```
+
+异步验证：
+```javascript
+connect().use(connect.basicAuth(function(req, res, callback){
+  User.authenticate({user: user, pass: pass});
+}));
+```
+
+basicAuth的例子：
+```javascript
+var connect = require('connect');
+var app = connect();
+//同步验证
+app.use(connect.basicAuth(function(user, pass){
+    var isLogin = 'fens' == user && 'fens' == pass;
+    console.log('Login:' + isLogin);
+    return isLogin;
+}));
+app.use(function(req, res) {
+   res.end('welcome~');
+}).listen(3000);
+```
+
+输出结果：
+1. 会弹出验证弹出框
+![alt text](../imgs/basicAuth1.png "Title")
+2. 在正确输入用户名和密码以后，可以正常访问页面
+![alt text](../imgs/basicAuth2.png "Title")
+
 ###Basic认证
 Basic认证是当客户端与服务端进行请求时，允许通过用户名和密码实现的一种身份认证方式。
 如果一个页面需要Basic认证，它会检查请求报文头中的Authorization字段内容，该字段的值由认证方式和加密值构成。如下：

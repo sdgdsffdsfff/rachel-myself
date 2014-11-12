@@ -30,3 +30,28 @@ exports = module.exports = function bodyParser(options){
 };
 ```
 
+bodyParser的例子：
+```javascript
+var connect = require('connect');
+var app = connect();
+app.use(connect.bodyParser());
+app.use(function(req, res) {
+    res.end('req.body=>'+ JSON.stringify(req.body));
+}).listen(3000);
+```
+
+测试：
+POST方法：
+```javascript
+$ curl -d 'user[name]=test' http://localhost:3000/
+输出内容为：
+    req.body=>{'user':{'name':'test'}}
+```
+
+GET方法：
+```javascript
+$ curl http://localhost:3000/?user=123
+输出内容为：
+    req.body=>{}
+
+```

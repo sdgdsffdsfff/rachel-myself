@@ -86,3 +86,44 @@ return function logger(req, res, next) {
     //  var stream = options.stream || process.stdout,stream可能是标准输出设备，如果不使用options指定的话
     //以上表示，如果options中指定了立即输出到stream中，则立即写入，否则就如上setInterval，每隔固定事件写一次
 ```
+
+logger例子：
+```javascript
+var connect = require('connect');
+var app = connect();
+app.use(connect.logger());
+app.use(function(req,res){
+    res.end('hello world\n');
+}).listen(3000)
+```
+
+connect.logger()输出：
+```javascript
+127.0.0.1 - - [Mon, 23 Sep 2013 05:14:18 GMT] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi
+t/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36"
+127.0.0.1 - - [Mon, 23 Sep 2013 05:14:18 GMT] "GET /favicon.ico HTTP/1.1" 200 - "-" "Mozilla/5.0 (Windows NT 6.1; WOW64)
+ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36"
+```
+
+connect.logger('short')输出：
+```javascript
+127.0.0.1 - GET / HTTP/1.1 200 - - 9 ms
+127.0.0.1 - GET /favicon.ico HTTP/1.1 200 - - 1 ms
+```
+
+connect.logger('dev')输出：
+```javascript
+GET / 200 5ms
+GET /favicon.ico 200 1ms
+```
+
+connect.logger(function(tokens, req, res){
+    return 'some format string';
+});
+输出：
+```javascript
+some format string
+some format string
+```
+
+对于我们的开发环境，日志设置为dev就好了

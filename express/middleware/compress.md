@@ -1,3 +1,14 @@
+####compress中间件
+描述：gzip压缩中间件，通过filter函数设置需要 压缩的文件类型。压缩算法是gzip/deflate.
+
+我们可以自己定义filter函数：
+```javascript
+exports.filter = function(req, res) {
+  return /json|text|javascript|dart|image\/svg\+xml|application\/x-font-ttf|application\/vnd\.ms-opentype|application\/vnd\.ms-fontobject/.test(res.getHeader('Content-Type'));
+}
+```
+
+
 #####依赖原生zlib模块压缩
 ```javascript
 var zlib = require('zlib');
@@ -59,3 +70,18 @@ res.on('header', function(){
       });
     });
 ```
+
+compress中间件例子：
+```javscript
+var connect = require('connect');
+var app = connect();
+app.use(connect.compress({level: 9}));
+app.use(function(req, res) {
+    res.setHeader('Content-Type', 'text/html');
+    res.write(res);
+    res.end('hello world\n');
+}).listen(3000);
+```
+
+使用浏览器http://localhost:3000，我们可以看到该请求在Response Headers中有一行是：
+Content-Encoding:gzip
