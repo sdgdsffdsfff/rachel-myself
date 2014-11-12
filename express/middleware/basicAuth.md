@@ -32,9 +32,9 @@ app.use(function(req, res) {
 
 输出结果：
 1. 会弹出验证弹出框
-![alt text](../imgs/basicAuth1.png "Title")
+![alt text](./imgs/basicAuth1.png "Title")
 2. 在正确输入用户名和密码以后，可以正常访问页面
-![alt text](../imgs/basicAuth2.png "Title")
+![alt text](./imgs/basicAuth2.png "Title")
 
 ###Basic认证
 Basic认证是当客户端与服务端进行请求时，允许通过用户名和密码实现的一种身份认证方式。
