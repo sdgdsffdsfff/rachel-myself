@@ -1,4 +1,10 @@
-该中间件时为了给一个网站（或者说项目），请求一个默认图标（ajk也有，response.js中）。
+####favicon中间件
+描述：网页图标中间件，指定favicon的路径
+
+参数：
+maxAge：缓存存活时间（ms），默认值为1天
+
+该中间件是为了给一个网站（或者说项目），请求一个默认图标（ajk也有，response.js中）。
 使用：app.use(express.favicon());//use使用中间件
 
 可以简单如下：

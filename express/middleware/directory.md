@@ -1,4 +1,7 @@
 ####directory中间件
+
+描述：目录列表中间件，列出指定目录下的文件
+
 用处：当给定一个文件目录，通过它是可以将该目录下的文件以不同形式（html/json/text）展现出来。
 针对给出的不同请求头Accept(如：Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8)
 来判别返回哪种形式的文件。
@@ -97,3 +100,17 @@ exports.plain = function(req, res, files){
   res.end(files);
 };
 ```
+
+例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.directory(__dirname + '/public', {hidden: true}));
+   app.use(function(req, res) {
+       res.end('It is end~');
+   });
+   app.listen(3002);
+```
+
+使用浏览器：http://localhost:3002.结果如下：
+![alt text](./imgs/directory.png "Title")

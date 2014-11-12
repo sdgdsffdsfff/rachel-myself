@@ -1,4 +1,45 @@
 ####errorHandler中间件
+
+描述：错误处理中间件，对于开发过程中的错误，提供栈跟踪和错误响应，接受3种类型text，html，json。
+Text：text/plain是默认类型，返回一个简单的栈跟踪和错误信息
+JSON：application/json，返回{"error": error}对象
+HTML：返回一个HTML错误页面
+
+参数：
+showStack：返回错误信息和错误栈，默认值为false
+showMessage：只返回错误信息，默认值false
+dumpExceptions：输出异常日志，默认值false
+logErrors：输出错误日志到文件，默认值false
+
+例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.logger('dev'));
+   app.use(express.errorHandler({dumpExceptions: true, showStack: true}));
+   app.use(function(req, res){
+       req.headers.accept = 'html';
+       res.write(JSON.stringify(req.header.accept));
+       throw new Error('My errorHandler!!!');
+       res.end('a  ho  ~~~');
+  });
+  app.listen(3003);
+```
+错误结果，控制台输出：
+```javascript
+Error: my errorHandler!!!
+    at Object.handle (D:\workspace\javascript\nodejs-connect\errorHadnler.js:8:15)
+    at next (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:190:15)
+    at next (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:192:9)
+    at Object.logger (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\middleware\logger.js:156:5)
+    at next (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:190:15)
+    at Function.app.handle (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:198:3)
+    at Server.app (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\connect.js:65:37)
+    at Server.EventEmitter.emit (events.js:98:17)
+    at HTTPParser.parser.onIncoming (http.js:2027:12)
+    at HTTPParser.parserOnHeadersComplete [as onHeadersComplete] (http.js:119:23)
+```
+
 使用：
 // development only
 if ('development' == app.get('env')) {

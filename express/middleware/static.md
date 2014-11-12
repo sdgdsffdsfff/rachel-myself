@@ -1,4 +1,13 @@
 ####static中间件
+
+描述：静态文件处理中间件，可以通过设置root路径作为静态文件服务器。
+
+它的参数：
+maxAge: 浏览器缓存存活时间（ms），默认值是0
+hidden: 是否允许传递隐藏类型的文件，默认值为false
+redirect: 是否允许当访问名是一个目录，结尾增加"/"，默认值true
+index: 设置默认的文件名，默认值index.html
+
 使用方案：    app.use(express.static(path.join(__dirname, './public')));
 
 它的用处：是用于静态资源的载入：如我们自己写的js文件，以及引入的bootstrap和jquery等，还可以是css文件及图片等。
@@ -128,3 +137,21 @@ SendStream.prototype.stream = function(path, options){
   });
 };
 ```
+
+例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.static(__dirname + '/public', {maxAge: 60*60*1000, hidden: false}));
+   app.use(function(req, res) {
+       res.setHeader('Content-Type', 'text/html');
+       res.write('static:');
+       res.write('<img src="test.png" width="100px">');
+       res.end('end~3Q');
+   });
+  app.listen(3002);
+```
+
+结果：
+通过浏览器http://localhost:3002访问，截图如下：
+![alt text](./imgs/static.png "Title")

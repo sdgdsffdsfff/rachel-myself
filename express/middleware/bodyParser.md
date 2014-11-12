@@ -32,9 +32,9 @@ exports = module.exports = function bodyParser(options){
 
 bodyParser的例子：
 ```javascript
-var connect = require('connect');
-var app = connect();
-app.use(connect.bodyParser());
+var express = require('express');
+var app = express();
+app.use(express.bodyParser());
 app.use(function(req, res) {
     res.end('req.body=>'+ JSON.stringify(req.body));
 }).listen(3000);

@@ -1,3 +1,6 @@
+####CSRF中间件
+描述：跨域请求csrf保护中间件，通过req.csrfToken()令牌函数绑定到请求的表单字段。这个令牌会对访客会话进行验证。
+
 #####CSRF
 CSRF全称是Cross-Site Request Forgery，中文意思是跨站请求伪造。举例如下：
 
@@ -11,6 +14,8 @@ CSRF漏洞被发现，则可以在另一个网站http://domain_b.com/attack  上
 以下是解决CSRF攻击的一种方案（添加随机值）
 
 默认情况下，这个中间件会产生一个名为"_csrf"的标志。这个标志应该添加到那些需要服务器更改的请求里，可以放在一个表单的隐藏域，请求参数等。
+
+默认情况下，我们是会通过检查bodyParser()产生的req.body，query()函数产生的query，和x-csrf-token的header
 
 代码解析如下：
 ```javascript

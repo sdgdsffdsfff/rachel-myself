@@ -4,10 +4,10 @@
 
 例子：
 ```javascript
-var connect = require('connect');
-var app = connect()
-    .use(connect.logger('dev'))
-    .use(connect.timeout(1000))
+var express = require('express');
+var app = express()
+    .use(express.logger('dev'))
+    .use(express.timeout(1000))
     .use(function (req, res) {
         setTimeout(function(){
             res.end('hello world\n');

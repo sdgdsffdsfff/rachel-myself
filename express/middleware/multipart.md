@@ -1,6 +1,8 @@
 ####multipart中间件
 
-意义：针对提交文件表单（其中有非文件表单）后，通过该中间件的处理，我们可以通过req.files来获取文件表单的内容，req.body来获取该提交中非文件表单的内容。
+描述：针对提交文件表单（其中有非文件表单）后，通过该中间件的处理，我们可以通过req.files来获取文件表单的内容，req.body来获取该提交中非文件表单的内容。
+
+defer参数：在不等待“结束”事件，通过req.form.next()函数，可以缓冲并处理多个表单对象，还可以绑定到“progress”或者“events”事件。
 
 特殊表单：与普通表单相比较，它可以有file类型的空间，以及需要指定表单属性enctype为multipart/form-data
 ```html
@@ -113,3 +115,53 @@ exports = module.exports = function(options){
   }
 };
 ```
+
+摘录（之前版本的某一个实现，可用于理解现有版本的一个参考）：
+1. Temporary Files：临时文件
+   默认情况下，临时文件会被保存在os.tmpDir()目录，但不会自动回归。我们必须要手动处理。如果没有使用defer选项事，可以通过req.files来获得对象的使用。
+```javascript
+req.files.images.forEach(function(funciton(file) {
+    console.log('uploaded: %s %skb : %s', file.originalFilename, file.size / 1024 } 0, file.path);
+}));
+```
+
+2. Streaming:流式处理
+   当使用defer选项时，文件在上传过程中，可以通过'part'事件和流控制访问文件。
+```javascript
+req.form.on('part', function(part){
+  // transfer to s3 etc
+  console.log('upload %s %s', part.name, part.filename);
+  var out = fs.createWriteStream('/tmp/' + part.filename);
+  part.pipe(out);
+});
+
+req.form.on('close', function(){
+  res.end('uploaded!');
+});
+```
+
+####multipart例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.multipart())
+   app.use(function(req, res) {
+       if (req.method == 'POST') {
+          console.log(req.files);
+          res.end('Upload==>' + req.files.file.path);
+       }      
+       res.setHeader('Content-Type', 'text/html');
+       res.write('<form enctype="multipart/form-data" method="POST"><input type="file" name="file">    ');  
+       res.write('<input type="submit" value="submit" />');
+       res.write('</form>');   
+       res.end('welcome~welcome!');
+   });
+   app.listen(3002);
+```
+
+1. 通过form表单选择文件
+    
+    ![alt text](./imgs/multipart1.png "Title")
+2. POST请求解析
+
+    ![alt text](./imgs/multipart2.png "Title")

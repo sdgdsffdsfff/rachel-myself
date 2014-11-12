@@ -159,3 +159,26 @@ function respondFromCache(req, res, cacheEntry) {
   }
 }
 ```
+
+例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.static(__dirname + '/public', {maxAge: 60*60*1000, hidden: false}));
+   app.use(express.staticCache());
+   app.use(function(req, res) {
+       res.setHeader('Content-Type', 'text/html');
+       res.write('static:');
+       res.write('<img src="test.png" width="100px">');
+       res.end('end~3Q');
+  });
+  app.listen(3002);
+~                     
+```
+
+使用浏览器访问：http://localhost：3002，结果为：
+![alt text](./imgs/static.png "Title")
+
+但是比static中间价的例子，控制台多了输出信息：
+connect.staticCache() is deprecated and will be removed in 3.0
+use varnish or similar reverse proxy caches.

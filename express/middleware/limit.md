@@ -1,4 +1,7 @@
-###内存限制
+####limit中间件
+
+描述：请求内容大小限制中间件，可以使用mb/kb/gb为单位
+
 在解析表单、json、xml部分，我们采取的策略是先保存用户提交的所有数据，然后再解析处理，最后才传递给业务逻辑。
 这种策略存在的问题是，它仅仅适合数据量小的提交请求，一旦数据量过大，将发生内存被占光的情况。解决方案如下两种：
 
@@ -57,6 +60,45 @@ module.exports = functionL limit(bytes){
   };
 };
 
+```
+
+例子：
+```javascript
+   var express = require('express');
+   var app = express();
+   app.use(express.logger('dev'));//默认输出到标准输出设备，即终端
+   app.use(express.limit('1kb'));
+   app.use(express.multipart());
+   app.use(function(req, res) {
+       if (req.method == 'POST') {
+           console.log(req.files);
+           res.end('Upload=>' + req.files.file.path);
+      }
+      res.setHeader('Content-Type', 'text/html');
+      res.write('<form enctype="multipart/form-data" method="POST"><input type="file" name="file">');
+      res.write('<input type="submit" value="submit">');
+      res.write('</form>');
+      res.end('It is end~');
+  });   
+  app.listen(3002);
+```
+
+结果当我们上传的文件大于1kb的时候，终端输出如下：
+```javascript
+GET / 200 8ms
+Error: Request Entity Too Large
+    at Object.exports.error (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\utils.js:62:13)
+    at Object.limit [as handle] (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\middleware\limit.js:46:
+47)
+    at next (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:190:15)
+    at Object.logger (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\middleware\logger.js:156:5)
+    at next (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:190:15)
+    at Function.app.handle (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\proto.js:198:3)
+    at Server.app (D:\workspace\javascript\nodejs-connect\node_modules\connect\lib\connect.js:65:37)
+    at Server.EventEmitter.emit (events.js:98:17)
+    at HTTPParser.parser.onIncoming (http.js:2027:12)
+    at HTTPParser.parserOnHeadersComplete [as onHeadersComplete] (http.js:119:23)
+POST / 413 8ms - 961b
 ```
 
 ####总结

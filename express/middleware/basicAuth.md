@@ -3,24 +3,24 @@
 
 同步验证：
 ```javascript
-connect().use(connect.basicAuth(function(user, pass){
+express().use(express.basicAuth(function(user, pass){
     return 'tj' == user && 'wahoo' == pass;
 }));
 ```
 
 异步验证：
 ```javascript
-connect().use(connect.basicAuth(function(req, res, callback){
+express().use(express.basicAuth(function(req, res, callback){
   User.authenticate({user: user, pass: pass});
 }));
 ```
 
 basicAuth的例子：
 ```javascript
-var connect = require('connect');
-var app = connect();
+var express = require('express');
+var app = express();
 //同步验证
-app.use(connect.basicAuth(function(user, pass){
+app.use(express.basicAuth(function(user, pass){
     var isLogin = 'fens' == user && 'fens' == pass;
     console.log('Login:' + isLogin);
     return isLogin;
@@ -32,8 +32,11 @@ app.use(function(req, res) {
 
 输出结果：
 1. 会弹出验证弹出框
+
 ![alt text](./imgs/basicAuth1.png "Title")
+
 2. 在正确输入用户名和密码以后，可以正常访问页面
+
 ![alt text](./imgs/basicAuth2.png "Title")
 
 ###Basic认证

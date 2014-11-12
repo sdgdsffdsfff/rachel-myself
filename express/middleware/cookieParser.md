@@ -50,9 +50,9 @@ module.exports = function cookieParser(secret){
 
 cookieParser的例子：
 ```javascript
-var connect = require('connect');
-var app = connect();
-app.use(connect.cookieParser('secret string'));
+var express = require('express');
+var app = express();
+app.use(express.cookieParser('secret string'));
 app.use(function(req, res, next){
     req.cookies.website = 'blog.fens.me';
     req.end(JSON.stringify(req.cookies));

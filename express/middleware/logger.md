@@ -89,15 +89,15 @@ return function logger(req, res, next) {
 
 logger例子：
 ```javascript
-var connect = require('connect');
-var app = connect();
-app.use(connect.logger());
+var express = require('express');
+var app = express();
+app.use(express.logger());
 app.use(function(req,res){
     res.end('hello world\n');
 }).listen(3000)
 ```
 
-connect.logger()输出：
+express.logger()输出：
 ```javascript
 127.0.0.1 - - [Mon, 23 Sep 2013 05:14:18 GMT] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKi
 t/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36"
@@ -105,19 +105,19 @@ t/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36"
  AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.95 Safari/537.36"
 ```
 
-connect.logger('short')输出：
+express.logger('short')输出：
 ```javascript
 127.0.0.1 - GET / HTTP/1.1 200 - - 9 ms
 127.0.0.1 - GET /favicon.ico HTTP/1.1 200 - - 1 ms
 ```
 
-connect.logger('dev')输出：
+express.logger('dev')输出：
 ```javascript
 GET / 200 5ms
 GET /favicon.ico 200 1ms
 ```
 
-connect.logger(function(tokens, req, res){
+express.logger(function(tokens, req, res){
     return 'some format string';
 });
 输出：

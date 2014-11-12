@@ -73,9 +73,9 @@ res.on('header', function(){
 
 compress中间件例子：
 ```javscript
-var connect = require('connect');
-var app = connect();
-app.use(connect.compress({level: 9}));
+var express = require('express');
+var app = express();
+app.use(express.compress({level: 9}));
 app.use(function(req, res) {
     res.setHeader('Content-Type', 'text/html');
     res.write(res);
