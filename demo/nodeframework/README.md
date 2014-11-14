@@ -34,3 +34,6 @@ app.listen(process.env.PORT);//如此监听的话就可以在使用node执行nod
 1. 当我们执行node app.js时候，它会先new App()，即启动一个应用程序，这个时候应用程序使用server.on('request', handler)。接下来执行use，即将所有用到的中间件都放入到middleWareList数组中。之后app.listen()对应端口。
 2. 此时，当客户端发送一个请求过来，服务端监听到request请求，便会执行handler函数。该函数会默认执行第一个中间件（可是一般而言，每个中间件都会用next()将执行权限往下传递），执行完，其内部的next便会继续执行第二个，...。最终将所有的中间件（即middleWareList数组中所有元素）都执行完毕。
 
+####中间件和处理函数的顺序
+
+![alt text](./readme-imgs/request.png "Title")

@@ -6,6 +6,10 @@ module.exports = function App() {
 	//中间件的有序列表
 	this._midWareList = [];
 
+	//增加get和post方法
+	this._getHandler = null;
+	this._postHandler = null;
+
 	this._server = http.createServer(handler);
 
 	function handler(req, res) {
@@ -26,7 +30,17 @@ module.exports = function App() {
 		//执行中间件
 		function execMidWare() {
 			var midWare = this._midWareList[midWareIndex];
-			midWare && midWare(req, res, next);
+			if (midWare) {
+				midWare(req, res, next);
+				return;
+			}
+			//请求方法的判断是通过req.method
+			if (req.method == 'GET') {
+				this._getHandler && this._getHandler(req, res);
+
+			} else if (req.method == 'POST') {
+				this._postHandler && this._postHandler(req, res);
+			}
 		}
 	}
 
@@ -40,4 +54,14 @@ App.prototype.use = function(midWare) {
 //将原生的http模块的listen挂载到了App上，所以它的参数同原生
 App.prototype.listen = function() {
 	this._server.listen.apply(this._server, arguments);
+}
+
+//get/post/use只是相当于一个注册的过程，真正的执行是通过next
+//get或者是post是在所有中间件执行完了才会执行，因为它没有next。
+App.prototype.get = function(handler) {
+	this._getHandler = handler;
+}
+
+App.prototype.post = function(handler) {
+	this._postHandler = handler;
 }
