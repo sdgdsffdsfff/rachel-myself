@@ -1,3 +1,13 @@
+####代码案例版本对应关系
+
+注：其他测试的版本与下一致
+1. Appv1---基础以及添加get/post的不同处理方式
+2. Appv2---添加route路由处理
+3. Appv3---添加泛式route路由处理
+4. Appv4---加上param.js中间件和query.js处理.让框架有了req.params和req.query属性.只适用于GET请求
+5. 
+5. 
+
 #####框架构思
 我们这边使用的是中间件的形式，来为框架添加功能，这些中间件是在执行主业务逻辑之前执行的，且这些中间件自身之间也是有顺序的。web服务器的request事件的触发，表示有客户来访问我们的服务器资源。而且我们的服务器主逻辑，就是为了响应request事件的。伪代码的表示如下：
 ```javascript
@@ -37,3 +47,96 @@ app.listen(process.env.PORT);//如此监听的话就可以在使用node执行nod
 ####中间件和处理函数的顺序
 
 ![alt text](./readme-imgs/request.png "Title")
+
+
+####路由的简单原理
+ 1. 最开始，我们是按照get或post的不同发送方式来区分处理，如下：
+ ```javacript
+app.get(function(req, res) {
+...
+});
+
+app.post(function(req, res) {
+...
+});
+ ```
+ 
+ 2. 之后，我们还可以在之前基础上，针对同一个get方式，可以按照route路由划分。我们可以用两个对象route_get_handles和route_post_handles，以key-value形式表示。
+  如下：
+ ```javascript
+app.get('/about', function(req, res) {
+
+});
+ ```
+  
+ 3. 泛式路由，实现如下两个泛式路由：
+/doc/:id：符合这个泛式的url可以是：/doc/id0001
+/doc/title/*：符合这个泛式的url可以是：/doc/title/abcd 或 /doc/title
+
+实现上述的原理是：通过泛式规则转换为正则表达式，加以判断即可
+
+####GET请求
+ 
+ req.params
+ ```javascript
+//http://localhost:3000/about/zhangsan/dfsdf/78测试url，name＝zhangsan,age=78
+app.get('/about/:name/*/:age', function(req, res) {
+    res.end('My name is ' + req.params.name + '; my age is ' + req.params.age);
+});
+ ```
+
+ req.query
+ ```javascript
+//测试的例子：http://localhost:3000/myname?name="zhangsan"&age=24
+app.get('/myname', function(req, res) {
+    res.end('My name is ' + req.query.name + '; age is ' + req.query.age);
+});
+ ```
+
+####POST请求
+
+1. req.body
+因为get请求无法传递大数据量的请求参数，所以有了post请求方法。通过该请求方法的处理，我们便可以通过req.body获取传递过来的参数。
+
+原理：我们通过body_data来存储post方法请求的body体数据，通过监听req.on('data', callback)，可以拿到体数据，callback可能会被调用多次，因为数据可能会很大，所以每一次得到的chunk数据都会被累加到body_data中，当req.on('end', callback)的回调函数被调用时，就表示已经读取完毕了。这是的body_data便是完整的body体数据。且将body_data挂载到req.body上。
+```javascript
+app.post('/post', function(req, res) {
+    var body_data = '';
+    req.on('data', function(chunk) {
+        body_data += chunk;
+    });
+    req.on('end', function(req, res) {
+        console.log('body体数据为：' + body_data.toString());
+        req.body = qs.parse(body_data);
+    });
+});
+```
+
+2. 针对enctype='multipart/form-data'[也可参见对express中间件multipart.js的分析]
+
+通过程序：node nodeframework/example/post/multipart-test.js
+url:http://localhost:3000/multipart-file.html
+
+[postjs.md](./postjs.md "关于postjs插件的详细解释")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

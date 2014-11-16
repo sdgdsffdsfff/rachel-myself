@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'>
+	<title>post.js中间件测试案例</title>
+</head>
+<body>
+	<!-- enctype="multipart/form-data" 不能少-->
+	<form action="/filepost" method="post" enctype="multipart/form-data">
+		<p>Title: <input type='type' name='title'></p>
+		<p>Content: <textarea name="content"></textarea></p>
+		<p>File Upload: <input type="file" name='file'></p>
+		<p><input type="submit"></p>
+	</form>
+</body>
+</html>

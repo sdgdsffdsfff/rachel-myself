@@ -2,7 +2,9 @@
 应用程序类，可以通过new App()来创建一个应用程序
 */
 var http = require('http');
-module.exports = function App() {
+module.exports = App;
+
+function App() {
 	//中间件的有序列表
 	this._midWareList = [];
 
@@ -11,9 +13,10 @@ module.exports = function App() {
 	this._postHandler = null;
 
 	this._server = http.createServer(handler);
+	var self = this;
 
-	function handler(req, res) {
-		if (!!this._midWareList.length) {
+	function handler(req, res) {  
+		if (!self._midWareList.length) {
 			return;
 		}
 		var midWareIndex = 0;
@@ -29,18 +32,19 @@ module.exports = function App() {
 
 		//执行中间件
 		function execMidWare() {
-			var midWare = this._midWareList[midWareIndex];
+			var midWare = self._midWareList[midWareIndex]; 
 			if (midWare) {
 				midWare(req, res, next);
 				return;
 			}
 			//请求方法的判断是通过req.method
 			if (req.method == 'GET') {
-				this._getHandler && this._getHandler(req, res);
+				self._getHandler && self._getHandler(req, res);
 
 			} else if (req.method == 'POST') {
-				this._postHandler && this._postHandler(req, res);
+				self._postHandler && self._postHandler(req, res);
 			}
+
 		}
 	}
 
@@ -57,7 +61,7 @@ App.prototype.listen = function() {
 }
 
 //get/post/use只是相当于一个注册的过程，真正的执行是通过next
-//get或者是post是在所有中间件执行完了才会执行，因为它没有next。
+get或者是post是在所有中间件执行完了才会执行，因为它没有next。
 App.prototype.get = function(handler) {
 	this._getHandler = handler;
 }
@@ -65,3 +69,7 @@ App.prototype.get = function(handler) {
 App.prototype.post = function(handler) {
 	this._postHandler = handler;
 }
+
+
+
+

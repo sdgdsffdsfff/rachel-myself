@@ -30,8 +30,6 @@ function handler(request, response) {
 //将url转换成资源路径
 function url2Path(urlStr) {
 	var urlObj = url.parse(urlStr);//将url信息封装成JSON对象
-	console.log('path', urlObj.path);
-	console.log('pathname', urlObj.pathname);
 	//所以我们获取url的path部分，是通过pathname，整个path是包括search部分的
 	var pathname = urlObj.path == '/' ? 'index.html' : urlObj.pathname;
 	return	pathname;//得到路径信息
