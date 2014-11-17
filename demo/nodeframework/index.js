@@ -14,3 +14,13 @@ exports.static = require('./lib/static');
 exports.query = require('./lib/query');
 
 exports.post = require('./lib/post');
+
+exports.text = require('./lib/text');
+
+exports.redirect = require('./lib/redirect');
+
+exports.download = require('./lib/download');
+
+exports.view = require('./lib/view');
+
+exports.session = require('./lib/session');

@@ -9,7 +9,6 @@ var url = require('url'),
 
 module.exports = function(req, res, next) {
 	var urlPathname = url.parse(req.url).query;
-	console.log(urlPathname);
 	req.query = {};
 	if (urlPathname) {
 		//此时urlPathname是个对象字符串，所以需要解析

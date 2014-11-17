@@ -119,6 +119,35 @@ url:http://localhost:3000/multipart-file.html
 
 [postjs.md](./postjs.md "关于postjs插件的详细解释")
 
+####response响应渲染
+我们实现的基本响应渲染功能，包括以下几个：
+1. 页面跳转 redirect (lib/redirect.js).原理(设置头信息即可)：
+```javascript
+res.writeHead(302, {
+    Location: location(url)
+});
+```
+
+2. 文本 text (lib/text.js)
+3. 静态页 static
+4. 下载 download
+<br>原理：通过设置response信息头即可做到。设置三个属性：
+<br>Content-disposition：下载的附件文件名称
+<br>Content-Type：下载文件的类型
+<br>Content-Length: 下载文件的大小
+```javascript
+res.writeHead(200, {
+    //设置下载文件名称
+    'Content-disposition': 'attachment; filename=' + fileName
+    //保证是二进制类型，这样浏览器可用下载方式
+    'Content-Type': 'application/octet-stream',
+    //设置buf大小
+    'Content-Length': buf.length
+});
+```
+
+5. 动态页 view
+
 
 
 
