@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+	<script>
+	//文件需要放在有apache服务器搭建的机器上调试，看效果
+	// var worker = new Worker('./worker.js');//创建一个Worker对象并向它传递，将在新线程中执行的脚本URL
+	// worker.postMessage('hello world!'); //向新创建的worker传递数据
+	// worker.onmessage = function(evt) {
+	// 	//接收传递过来的数据要使用xx.data
+	// 	console.log('I am a test.html. The data is ',evt.data);
+	// }
+
+	/*
+WEB主线程:
+
+1.通过 worker = new Worker( url ) 加载一个JS文件来创建一个worker，同时返回一个worker实例。
+
+2.通过worker.postMessage( data ) 方法来向worker发送数据。
+
+3.绑定worker.onmessage方法来接收worker发送过来的数据。
+
+4.可以使用 worker.terminate() 来终止一个worker的执行。
+
+worker新线程：
+
+1.通过postMessage( data ) 方法来向主线程发送数据。
+
+2.绑定onmessage方法来接收主线程发送过来的数据。
+	*/
+	</script>
+
+
+	<script>
+	onload = function() {
+		var worker = new Worker('./fibonacci.js');
+		worker.onmessage = function(evt) {
+			var timeAfter = (new Date()).valueOf();
+			console.log('结果(40的fibonacci)：'+ evt.data,'当前时间：'+ timeAfter, '用时：' + (timeAfter - timer));
+		}
+		var timer = (new Date()).valueOf();
+		console.log('开始计算，当前时间：' + timer);
+		setTimeout(function() {
+			var timerr = (new Date()).valueOf();
+			console.log('定时器函数在计算数列时，执行，当前时间' + timerr, '用时：' + (timerr - timer));
+		}, 1000);
+
+		worker.postMessage(40);
+		console.log('我也是在计算数列时执行，worker的执行不影响我，哈哈～😄.用时：' + ((new Date()).valueOf() - timer));
+	}
+
+	// 上述执行结果：
+	// 	开始计算，当前时间：1419393438960
+	// 	我也是在计算数列时执行，worker的执行不影响我，哈哈～😄.用时：5
+ 	//  定时器函数在计算数列时，执行，当前时间1419393439968 用时：1008
+	// 	结果(40的fibonacci)：102334155 当前时间：1419393452619 用时：13659
+
+	// 从结果可以看出，fibonacci数列的计算并不会影响到主线程的代码执行，完全在自己独立的线程中计算，只是在计算完成之后将结果发回主线程而已。
+	</script>
+</body>
+</html>
+
