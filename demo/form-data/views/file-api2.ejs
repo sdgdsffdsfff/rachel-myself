@@ -1,0 +1,52 @@
+<body>
+	<input type="file" name="fileDemo" id="fileDemo" />
+	<input type="button" value='readAsDataURL' id='readAsDataURL' onclick='showDataByURL();'>
+	<input type="button" value="readAsBinaryString" id="readAsBinaryString" onclick="showDataByBinaryString();">
+	<input type="button" value="readAsText" id="readAsText" onclick="showDataByText();">
+	<div id='result'>
+	</div>
+	<script>
+		function showDataByURL() {
+			var retFile = document.getElementById('fileDemo').files[0];
+			if (retFile) {
+				var reader = new FileReader();
+
+				reader.readAsDataURL(retFile);
+
+				reader.onload = function() {
+					var urlData = reader.result;//或者使用this.result。因为此处的this就是指reader
+					document.getElementById('result').innerHTML += '<img src="' + urlData + '" alt="' + retFile.name + '" />';
+				}
+			}
+		}
+
+		function showDataByBinaryString() {
+			var retFile = document.getElementById('fileDemo').files[0];
+			if (retFile) {
+				var reader = new FileReader();
+
+				//异步方式，不会影响主线程
+				reader.readAsBinaryString(retFile);
+
+				reader.onload = function() {
+					document.getElementById('result').innerHTML += reader.result;
+				}
+
+			}
+		}
+
+		function showDataByText() {
+			var retFile = document.getElementById('fileDemo').files[0];
+			if (retFile) {
+				var reader = new FileReader();
+
+				reader.readAsText(retFile);
+
+				reader.onload = function() {
+					document.getElementById('result').innerHTML += reader.result;
+				}
+			}
+		}
+
+	</script>
+</body>

@@ -1,0 +1,94 @@
+<body>
+	<div id="progressBarZone">
+		请将文件拖拽进浏览器内！<br/>
+	</div>
+	<script>
+	//测试同源问题，使用：http://b.aifang.test:3009/file/drag访问。
+	/*
+	 做document.domain设置域名，则不会出现跨域问题，拿掉测试，会有跨域问题。
+	*/
+	document.domain = 'aifang.test';
+	var progressBarZone = document.getElementById('progressBarZone');
+
+	function sendFile(files) {
+		if (!files || files.length < 1) {
+			return;
+		}
+
+		var percent = document.createElement('div');
+		progressBarZone.appendChild(percent);
+
+		//formData
+		var formData = new FormData();
+		formData.append('submit', '中文');
+
+		var fileNames = '';
+		for (var i = 0; i < files.length; i++) {
+			//file对象有size,name属性
+			var file = files[i];
+			//往FormData对象添加File对象
+			formData.append('file[' + i + ']', file);
+
+			fileNames = '《' + file.name + '》,';
+		}
+
+		var xhr = new XMLHttpRequest();
+		xhr.upload.addEventListener('progress', function uploadProgress(evt) {
+			// evt有三个属性：
+			// lengthComputable － 可计算的已上传字节数
+			// total - 总的字节数
+			// loaded -  到目前为止上传的字节数
+			if (evt.lengthComputable) {
+				percent.innerHTML = fileNames + ' upload percent: ' + Math.round((evt.loaded /evt.total) * 100) + '%';
+			}
+		}, false);//false表示在事件冒泡阶段处理
+
+		xhr.upload.onload = function() {
+			percent.innerHTML = files + ' 上传完成';
+		};
+
+		xhr.upload.onerror = function() {
+			percent.innerHTML = files + ' 上传失败';
+		};
+
+		xhr.open('post', 'http://aifang.test:3009/drag/file/upload', true);
+
+		xhr.send(formData);
+	}
+
+	document.addEventListener('dragover', function(e) {
+		//必须调用。因为否则浏览器会进行默认处理，比如文本类型的文件会直接打开，非文本的可能会弹出一个下载文件框
+		e.stopPropagation();
+		e.preventDefault();
+	},false);
+	
+	document.addEventListener('drop', function(e) {
+		//原因同上
+		e.stopPropagation();
+		e.preventDefault();
+
+		sendFile(e.dataTransfer.files);
+	});
+
+	</script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

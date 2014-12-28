@@ -1,0 +1,84 @@
+<p>form data 测试案例</p>
+<form action="/formData/test" method="POST" id='formEle'>
+	<input type="text" name='name'>
+	<input type="text" name='age'>
+	<input type="submit" value="form提交">
+</form>
+<input type="button" value="普通提交" id="submitBtn">
+<p>返回的数据：</p>
+<div id="retData"></div>
+<script src="/javascripts/jquery-1.11.2.js"></script>
+<script type="text/javascript">
+	var ele = document.getElementById('submitBtn');
+
+	// formData1();
+	ele.onclick = function() {
+		// formData2();
+		formData2();
+		//后台打印：
+		// { name: 'benlinhuo', age: '23', sex: 'girl' }
+	}
+
+	function formData1() {
+		var formData = new FormData();
+		formData.append('key1', 'value1');
+		formData.append('key2', 'value2');
+
+		sendData(formData);
+		//后台打印：
+		// { key1: 'value1', key2: 'value2'}
+	}
+
+	function formData2() {
+		var form = document.getElementById('formEle');
+		var formData = new FormData(form);
+		formData.append('sex', 'girl');
+		sendData(formData);
+	}
+
+	function formData3() {
+		var form = document.getElementById('formEle');
+		//测试没成功，form元素无getFormData方法
+		var formData = form.getFormData();//拿form的formData
+		formData.append('lala', 'valuevalue');
+		sendData(formData);
+
+	}
+
+	function sendData(formData) {
+		//方案一
+		var xhr = new XMLHttpRequest();
+		xhr.open('post', 'http://localhost:3009/formData/test', true);
+		xhr.send(formData);
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+				console.log(xhr.response);
+			}		
+		}
+console.log(formData);
+
+//方案二，使用jquery，但是需要进行如下正确的设置
+		// $.ajax({
+		// 	url: '/formData/test',//可以是跨域的url
+		// 	type: 'POST',
+		// 	data: formData,
+		// 	processData: false, //告诉jQuery不要去处理发送的数据
+		// 	contentType: false, //告诉jQuery不要去设置Content-Type请求头
+		// 	success: function(ret) {
+		// 		console.log(ret);
+		// 	}
+		// });
+
+/*
+解释：processData选项：
+	默认情况下，通过data选项传递进来的数据，如果是一个对象(技术上讲只要不是字符串)，都会处理转化成一个查询字符串，以配合默认内容类型 "application/x-www-form-urlencoded"。如果要发送 DOM 树信息或其它不希望转换的信息，请设置为 false。
+
+
+contentType: 
+	当将数据发送到服务器时，使用该内容类型。 默认值是"application/x-www-form-urlencoded; charset=UTF-8"，适合大多数情况。 如果你明确地传递了一个内容类型（Content-Type）给 $.ajax()，那么他必定会发送给服务器（即使没有数据要发送）。 W3C的XMLHttpRequest的规范规定，数据将总是使用UTF-8字符集传递给服务器；指定其他字符集无法强制浏览器更改编码。 注意:对于跨域请求，内容类型设置为application/x-www-form-urlencoded, multipart/form-data, 或 text/plain以外， 将触发浏览器发送一个预检OPTIONS请求到服务器。
+string 类型
+*/
+}
+
+</script>
+

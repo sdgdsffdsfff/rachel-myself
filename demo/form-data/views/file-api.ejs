@@ -1,0 +1,70 @@
+<body>
+	<h1>File API DEMO</h1>
+	<form id='formDemo' method="post" enctype="multipart/form-data" action="javascript: uploadAndSubmit();">
+		<p>Upload File: <input id='fileRead' type="file" name="file" multiple></p>
+		<p><input type="submit" value="Submit"></p>
+	</form>
+	<div>
+		Progress(in Bytes): <span id='bytesRead'></span>/
+		<span id='bytesTotal'></span>
+	</div>
+	<script src="/javascripts/jquery-1.11.2.js"></script>
+	<script>
+		function uploadAndSubmit() {
+			var formDom = $('#formDemo')[0];
+			var fileDom = $('#fileRead')[0];
+			if (fileDom.files.length > 0) {
+				var firstFile = fileDom.files[0];
+
+				var reader = new FileReader();
+
+				reader.readAsBinaryString(firstFile);
+				//上述使用readAsBinaryString读取文件以后，就可以将读取的文件内容放在reader中了。后面可以通过reader.result来获取
+
+				reader.onloadstart = function() {
+					//该事件是在读取开始时触发
+					console.log('onloadstart');
+					$('#bytesTotal').html(firstFile.size);
+				}
+
+				reader.onprogress = function(progress) {
+					//这个事件是在读取进行中定时触发的
+					console.log('onprogress');
+					$('#bytesRead').html(progress.loaded);
+				}
+
+				reader.onload = function() {
+					//该事件是在读取成功结束后触发的
+					console.log('load complete');
+				}
+
+				reader.onloadend = function() {
+					//该事件是在读取结束以后，无论成功或者失败都会失败
+					if (reader.error) {
+						console.log(reader.error);
+					} else {
+						$('#bytesRead').html(firstFile.size);
+
+						//构造XMLHttpRequest对象，发送文件Binary数据
+						var xhr = new XMLHttpRequest();
+						xhr.open('post', 'http://aifang.test/upload/file');//第三个参数是async,默认是true
+						xhr.overrideMimeType('application/octet-stream');
+						xhr.send(reader.result);
+
+						xhr.onreadystatechange = function() {
+							if (xhr.readystate == 4) {
+								if (xhr.status == 200) {
+									console.log('upload complete');
+									console.log('response: ' + xhr.responseText);
+								}
+							}
+						}
+					}
+				}
+			} else {	
+				alert('Please choose a file.');
+			}
+		}
+
+	</script>
+</body>
