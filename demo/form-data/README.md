@@ -280,15 +280,4 @@ xhr.timeout = 3000;
 　　* loadEnd事件：传输结束，但是不知道成功还是失败。
 ```
 
-相关阅读材料：
-```html
-　  1. Introduction to XMLHttpRequest Level 2： 新功能的综合介绍。
-　　2. New Tricks in XMLHttpRequest 2：一些用法的介绍。
-　　3. Using XMLHttpRequest：一些高级用法，主要针对Firefox浏览器。
-　　4. HTTP Access Control：CORS综述。
-　　5. DOM access control using cross-origin resource sharing：CORS的9种HTTP头信息
-　　6. Server-Side Access Control：服务器端CORS设置。
-　　7. Enable CORS：服务端CORS设置。
-```
-
 
