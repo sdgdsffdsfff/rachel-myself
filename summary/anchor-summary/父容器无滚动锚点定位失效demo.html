@@ -1,0 +1,49 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>有滚动条但锚点失效的例子</title>
+<style>
+body,
+html {
+	height: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+.container {
+	height: 100%;
+	overflow: auto;
+}
+.image {
+	margin-top: 200px;
+	margin-left: -264px;
+	position: absolute;
+	left: 50%;
+}
+.content {
+	width: 512px; height: 2000px;
+	padding-top: 600px;
+	margin-left: auto; margin-right: auto;
+	border: 1px solid red;
+}
+</style>
+</head>
+
+<body>
+<img id="hot" src="http://b.pic1.ajkimg.com/display/inform/a1c8c1a51c7640278fa69be39465bba8/W0QQnZo.jpg" class="image">
+<div id="container" class="container">
+	<div class="content">
+    	<p>分割线－－－－－－－－－－－－－－分割线</p>
+		<p><a href="#hot"><img src="http://c.pic1.ajkimg.com/display/xinfang/f499a5fa79080d3bd5f9380c881c4cf4/190x130n.jpg"></a></p>
+    </div>
+</div>
+<script>
+var container = document.getElementById("container"),
+	hot = document.getElementById("hot");
+container.onscroll = function() {
+	hot.style.top = -1 * this.scrollTop + "px";	
+};
+</script>
+</body>
+</html>
