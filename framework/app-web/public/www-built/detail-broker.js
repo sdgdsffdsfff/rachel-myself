@@ -1,0 +1,1 @@
+define("app/detail-broker",function(){}),require(["./common"],function(e){require(["app/detail-broker"])}),define("../detail-broker",function(){});

@@ -1,0 +1,1 @@
+define("app/favor-property",function(){}),require(["./common"],function(e){require(["app/favor-property"])}),define("../favor-property",function(){});
