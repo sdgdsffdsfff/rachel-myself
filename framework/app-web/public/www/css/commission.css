@@ -1,0 +1,46 @@
+.entrust-wrap {
+    padding: 1.5rem 1rem;
+}
+
+.entrust-box input:not(.hall):not(.room), .entrust-box input:not(.hall):not(.room):focus {
+    border: none;
+}
+
+.entrust-box.listview {
+    background-color: #fff;
+}
+
+.entrust-footer {
+    text-align: center;
+}
+
+.entrust-footer a {
+    width: 90%;
+}
+
+.hall, .room {
+    width: 4.5rem;
+    display: inline-block;
+    margin: 0 0.5rem;
+}
+
+.error-msg {
+    padding: .5rem 1.2rem;
+    height: 2rem;
+    line-height: 2rem;
+    visibility: hidden;
+}
+.show {
+    visibility: visible;
+}
+.placeholder{
+    display: block;
+    position: absolute;
+    top: .6rem;
+    left: 5.1rem;
+    width: 100%;
+    height: 3rem;
+    line-height: 3rem;
+    font-size: 1.5rem;
+    color: #888;
+}

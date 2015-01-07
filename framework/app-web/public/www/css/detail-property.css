@@ -1,0 +1,290 @@
+body {
+    background-color: #FFF;
+    font-size: 1.5rem;
+}
+
+/*最上部，经纪人信息*/
+.broker-info {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.broker-info img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+    margin-right: 1rem;
+}
+
+.broker-info .broker-detail p {
+    height: 2rem;
+    line-height: 2rem;
+}
+
+.broker-info .detail-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.broker-info .detail-evaluate span:first-child {
+    margin-right: 1rem;
+}
+
+.broker-info .detail-evaluate {
+    color: #888;
+}
+
+/*想买*/
+.house-outline {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    padding: 1rem 0;
+    margin: 0 1rem;
+}
+
+.house-outline .outline-left {
+    -webkit-box-flex: 1;
+    -moz-box-orient: 1;
+    box-orient: 1;
+}
+
+.outline-left .price-down {
+    border-radius: .5rem;
+    border: 1px solid #ffa742;
+    padding: 0 .5rem;
+    font-size: 1.2rem;
+    color: #ffa742;
+    font-weight: normal;
+}
+
+.house-outline p {
+    height: 2.8rem;
+    line-height: 2.8rem;
+}
+
+.house-outline p:first-child {
+    font-weight: bold;
+}
+.house-outline p:first-child span {
+    vertical-align: middle;
+}
+
+.house-outline .outline-left span:first-child {
+    margin-right: 1rem;
+}
+
+.house-outline .outline-left .left-money {
+    font-weight: bold;
+}
+
+.house-outline .wantbuy-icon {
+    font-size: 4rem;
+    color: #ff8001;
+    margin-top: .5rem;
+    display: inline-block;
+}
+
+/*户型朝向等*/
+.house-desc {
+    padding: 1rem;
+    border-bottom: .1rem solid #ccc;
+    border-top: .1rem solid #ccc;
+}
+
+.house-desc .desc-left,
+.house-desc .desc-right {
+    display: inline-block;
+    width: 49%;
+}
+
+.house-desc p {
+    height: 2.5rem;
+    line-height: 3rem;
+}
+
+.house-desc p span:first-child {
+    color: #888;
+}
+
+/*小区*/
+.house-comm {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    padding: 0 1rem;
+    height: 4.5rem;
+    line-height: 4.5rem;
+    border-bottom: .1rem solid #ccc;
+}
+
+.house-comm span {
+    display: block;
+    -webkit-box-flex: 1;
+    -moz-box-orient: 1;
+    box-orient: 1;
+}
+
+/*详细描述*/
+.desc-content {
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.desc-content .ellipses {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 14;
+    -webkit-box-orient: vertical;
+}
+
+.desc-content .content-show {
+    text-align: center;
+    height: 3rem;
+    line-height: 3rem;
+    color: #9C9C9C;
+}
+
+.desc-content .content-hide {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    display: none;
+}
+
+.desc-content .default-img {
+    display: block;
+    margin: 0 auto;
+    min-width: 100%;
+}
+.default-img-wrap {
+    max-height: 20rem;
+    overflow: hidden;
+    padding-top: 1.5rem;
+}
+/*卖房变价记录+房东建议看房时间*/
+.price-log,
+.view-date {
+    padding: 1rem 1rem 5rem;
+    border-top: .1rem solid #ccc;
+    border-bottom: .1rem solid #ccc;
+}
+.price-log {
+    padding: 1rem;
+}
+.price-log .log-title,
+.view-date .date-title {
+    height: 2rem;
+    line-height: 2rem;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+
+.price-log .log-item,
+.view-date .date-item {
+    height: 2rem;
+    line-height: 2rem;
+}
+
+.price-log .log-date {
+    margin-right: 1rem;
+}
+
+/*带看情况描述*/
+.with-see-info {
+    padding: 1rem;
+}
+
+.with-see-info p {
+    height: 2rem;
+    line-height: 2rem;
+}
+
+.with-see-info p span:first-child {
+    color: #888;
+}
+
+.with-see-info .info-title {
+    margin-right: .5rem;
+    font-weight: bold;
+}
+
+/*操作（电话＋预约看房）*/
+.house-operate {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    padding: .5rem 0;
+    width: 100%;
+    background-color: #fff;
+}
+
+.house-operate a {
+    margin-left: .5rem;
+}
+
+.house-operate .btn-phone {
+    display: block;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+}
+
+.house-operate .btn-view-house {
+    display: block;
+    -webkit-box-flex: 2;
+    -moz-box-flex: 2;
+    box-flex: 2;
+    margin-right: .5rem;
+}
+
+.canvas {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,1);
+    z-index: 9999;
+}
+
+.slider-box {
+    position: relative;
+    height: 20rem;
+    overflow: hidden;
+}
+
+.icon-phone {
+    margin-right: .4rem;
+    color: #fff;
+}
+
+.mid-font {
+    font-size: 1.5rem;
+}
+
+
+

@@ -1,0 +1,138 @@
+/* Button - size */
+.btn{
+    color: #FFF;
+    text-align: center;
+    font-size: 1.5rem;/*1.7rem*/
+    border-radius: 0.3rem;
+    background-color: #FF8000;
+}
+a.btn{
+    display: inline-block;
+    width: 100%;
+}
+.btn-large{
+    height: 4.4rem;
+    line-height: 4.4rem;
+    border-radius: 0.5rem;
+    font-size: 1.7rem;
+}
+.btn-medium{
+    height: 3.0rem;
+    line-height: 3.0rem;
+    border-radius: 0.3rem;
+    font-size: 1.5rem;
+}
+.btn-small{
+
+}
+/* Button - color */
+.btn-primary {
+    background-color: #333;
+}
+.btn-success{
+    background-color: #007FFF;
+}
+.btn-muted{
+    background-color: #888;
+}
+.btn-warning{
+    background-color: #FF8000;
+}
+.btn-error{
+    background-color: #FF0000;
+}
+.btn-important{
+    background-color: #E54A00;
+}
+.btn-info{
+
+}
+
+
+/* Deprecated */
+.com-btn {
+    display: inline-block;
+    cursor: pointer;
+    border-radius: .5rem;
+    text-align: center;
+    box-sizing: border-box;
+}
+.com-btn:hover {
+    text-decoration: none;
+}
+a.com-btn-dis {
+    color: #999;
+    background-color: #f2f2f2;
+    cursor: default;
+}
+/* btn size */
+.btn-huge {
+    height: 4.4rem;
+    line-height: 4.4rem;
+    padding: 0 2rem;
+    font-size: 1.6rem;
+    font-weight: bolder;
+}
+.btn-big {
+    height: 4rem;
+    line-height: 4rem;
+    padding: 0 2rem;
+    font-size: 1.7rem;
+    font-weight: bolder;
+    opacity: 0.95;
+}
+.btn-mid {
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+    font-size: 1.4rem;
+}
+.btn-min {
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 1rem;
+    font-size: 1.5rem;
+}
+/* btn color */
+/*.btn-org {
+    background-color: #f80;
+    color: #fff;
+    border: 1px solid #f80;
+}
+.btn-org:hover {
+    background-color: #f60;
+    color: #fff;
+    border: 1px solid #f60;
+}
+.btn-gre {
+    background-color: #62ab00;
+    color: #fff;
+    border: 1px solid #62ab00;
+}
+.btn-gre:hover {
+    background: #579700;
+    color: #fff;
+    border: 1px solid #579700;
+}
+a.btn-gre-dis, a.btn-org-dis {
+    background: #ccc;
+    color: #fff;
+    cursor: default;
+    border: 1px solid #ccc;
+}*/
+/**/
+.btn-succ {
+    background-color: #ff8000;
+    color: #fff;
+}
+
+.btn-info {
+    background-color: #E46E61;
+    color: #fff;
+}
+a.btn-succ-dis, a.btn-info-dis {
+    background: #ccc;
+    color: #fff;
+    cursor: default;
+    border: 1px solid #ccc;
+}

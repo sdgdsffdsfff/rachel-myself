@@ -1,0 +1,34 @@
+.header, .broker-item {
+    padding: 1.6rem;
+    border-bottom: 1px solid #ccc;
+}
+.broker-item {
+    display: -webkit-box;
+       -moz-box-align: center;
+    -webkit-box-align: center;
+       -moz-box-pack: center;
+    -webkit-box-pack: center;
+}
+.broker-item dl {
+    height: 10rem;
+    line-height: 1;
+}
+.broker-item dt, .broker-item .stars i {
+    font-size: 2.2rem;
+}
+.broker-item dd {
+    font-size: 2rem;
+}
+.broker-item .stars {
+    padding: 1.5rem 0;
+}
+.broker-item img {
+    padding-right: 1rem;
+    width: 10rem;
+    height: 10rem;
+}
+.broker-item dl {
+    display: block;
+    -webkit-box-sizing: border-box;
+    -webkit-box-flex: 1;
+}

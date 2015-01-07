@@ -1,0 +1,13 @@
+body {
+	padding: 1rem;
+}
+
+.con-subscribe {
+	text-align: center;
+}
+
+.con-subscribe .btn-subscribe {
+	width: 60%;
+	margin: 2rem 0;
+	text-align: center;
+}

@@ -1,0 +1,7 @@
+html, body, .page {
+    height: 100%;
+}
+.vote-box .btn-commit:hover, .vote-box .btn-commit:active {
+    background-color: #AE4036;
+    color: #fff;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Popup Demo</title>
+        <link rel="stylesheet" rev="stylesheet" href="../../css/ui/ui.popup.css" type="text/css">
+        <link rel="stylesheet" rev="stylesheet" href="../../css/ui/reset.css" type="text/css">
+        <style type="text/css">
+            .test-pop {
+                margin: 100px 100px;
+            }
+
+        </style>
+        <script type="text/javascript" src="../../js/lib/require.js"></script>
+    </head>
+    <body>
+        <input type="button" value='test popup11' id='testPop11' class="test-pop">
+        <input type="button" value='test popup22' id='testPop22' class="test-pop">
+        <script type="text/javascript">
+            require(['../../common'], function(common) {
+                require(['ui.popup', 'zepto'], function(popup, $) {
+                    var btn1 = $('#testPop11');
+                    var btn2 = $('#testPop22');
+                    btn1.on('click', function() {
+                        var opt = {
+                            isMask: true,
+                            content: '<p>我是一个测试案例</p>',
+                            // position: {left: 20, top: 20}
+                        }
+                        var pop1 = new popup(opt);
+                    });
+
+                    btn2.on('click', function() {
+
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
