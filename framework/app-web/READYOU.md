@@ -5,10 +5,11 @@
 ```javascript
 --app-web
     --app
+        --routes(路由，所有的url和api的配置)
         --config
             --local
                 --page.php 外层配置
-                --page.php 默认配置
+            --page.php 默认配置
         --controllers
             --SellerControler.php（php的后台controller层）
         --helpers
@@ -30,6 +31,8 @@
             --boot.js(node boot.js，boot.js会调用src/autoGenerate.js)
             --build.js(autoGenerate.js生成的文件结果)
             --r.js
+            --publish.sh(上线打包执行的shell脚本)
+            --cgconfig.js(node cgconfig.js，用于更改app/config/local/page.php中的配置)
         --www
             --css
             --example
