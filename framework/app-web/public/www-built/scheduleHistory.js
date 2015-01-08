@@ -1,1 +1,0 @@
-require(["./common"],function(e){require([""])}),define("../scheduleHistory",function(){});

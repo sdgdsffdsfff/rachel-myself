@@ -1,1 +1,0 @@
-define("app/user-center",function(){}),require(["./common"],function(e){require(["app/user-center"])}),define("../user-center",function(){});

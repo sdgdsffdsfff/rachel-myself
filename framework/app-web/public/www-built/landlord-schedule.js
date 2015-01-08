@@ -1,1 +1,0 @@
-define("../landlord-schedule",function(){});

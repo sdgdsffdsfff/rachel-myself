@@ -1,5 +1,0 @@
-//     Zepto.js
-//     (c) 2010-2014 Thomas Fuchs
-//     Zepto.js may be freely distributed under the MIT license.
-
-(function(e){function o(s,o){var a=s[i],f=a&&t[a];if(o===undefined)return f||u(s);if(f){if(o in f)return f[o];var l=r(o);if(l in f)return f[l]}return n.call(e(s),o)}function u(n,s,o){var u=n[i]||(n[i]=++e.uuid),f=t[u]||(t[u]=a(n));return s!==undefined&&(f[r(s)]=o),f}function a(t){var n={};return e.each(t.attributes||s,function(t,i){i.name.indexOf("data-")==0&&(n[r(i.name.replace("data-",""))]=e.zepto.deserializeValue(i.value))}),n}var t={},n=e.fn.data,r=e.camelCase,i=e.expando="Zepto"+ +(new Date),s=[];e.fn.data=function(t,n){return n===undefined?e.isPlainObject(t)?this.each(function(n,r){e.each(t,function(e,t){u(r,e,t)})}):0 in this?o(this[0],t):undefined:this.each(function(){u(this,t,n)})},e.fn.removeData=function(n){return typeof n=="string"&&(n=n.split(/\s+/)),this.each(function(){var s=this[i],o=s&&t[s];o&&e.each(n||o,function(e){delete o[n?r(this):e]})})},["remove","empty"].forEach(function(t){var n=e.fn[t];e.fn[t]=function(){var e=this.find("*");return t==="remove"&&(e=e.add(this)),e.removeData(),n.call(this)}})})(Zepto);
