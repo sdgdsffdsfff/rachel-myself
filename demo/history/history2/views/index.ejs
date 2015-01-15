@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>单页面，ajax</title>
+    <meta charset="utf-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <style>
+        .title {
+            width: 200px;
+            height: 100px;
+            border: 1px solid blue;
+        }
+
+        .title a {
+            display: block;
+            height: 20px;
+            line-height: 20px;
+            margin-right: 10px;
+        }
+
+        .content {
+            margin-top: 50px;
+            border: 1px solid red;
+            width: 350px;
+            height: 500px;
+        }
+
+        .selected {
+            background-color: yellow;
+        }
+    </style>
+    <script src="zepto.js"></script>
+  </head>
+  <body>
+    <div class="title">
+        <% items.forEach(function(num) { %>
+            <a href="javascript:void(0);" attrNum="<%= num %>" 
+            <% if (num == selectedNum) {%> 
+                class="selected" 
+            <% } %> >测试链接<%= num %></a>
+        <% }) %>
+    </div>
+    <div class="content">
+        <p id="content"><%= title %></p>
+    </div>
+    <script>
+        ;(function() { 
+            //测试返回的时候，页面会不会刷新.此处不起作用，是因为这不是一个真的页面，如果是真的页面，会重新刷新渲染页面的
+            alert('2222');
+            var $links = $('.title a');
+            //不同链接－－点击
+            $links.on('click', function(e) {
+                changeSelected($(this));
+                var num = $(this).attr('attrNum');
+                //返回问题(只有当手动click元素，才会pushState)
+                if (e && /\d/.test(e.button)) {
+                    var href = document.location.href.split('?')[0] + '?num=' + $(this).attr('attrNum'); 
+                    history.pushState({
+                        num: num
+                    }, num, href);
+                }
+                return false;
+            });
+
+            //history
+            if (history.pushState) {
+                $(window).on('popstate', function(e) {
+                    //当触发了该事件时，当前页面的url就会自动变成刚pop出的url（即最近一次pushState的或者replaceState的url）。前进/后退都会触发该事件，只要该页面push或replace过（步骤一，默认）
+                    //步骤二，因为url此时，已经变成了返回或者前进后的url.所以只需要把该url对应的内容进行填充就可以了（popTrigger做的事情）.通过ajax异步获取即可（此处可以通过链接元素的模拟click去做）
+                    popTrigger(e);
+                });
+                
+                //默认(一开始不带有?num=xxx。所以需要进行转换)
+                popTrigger();
+            }   
+
+            //前进/后退，触发的事件
+            function popTrigger(e) {
+                //首次没有num=xx这个，我们默认替换成?num=1，使用replaceState()
+                //当前拿到的location.href是后退或者前进后的url
+                var query = location.href.split('?')[1];
+                if (typeof query == 'undefined') {
+                    var $ele = $($links[0]);
+                    history.replaceState(null, null, document.location.href + '?num=' + $ele.attr('attrNum'));
+                    //默认渲染就是num==1的内容，所以不需要重新请求数据，而且也只有第一次才typeof query=='undefined'
+                    //$ele.click();
+
+                } else {
+                    var $targetEle = null;
+                    $links.each(function() {
+                        var num = $(this).attr('attrNum');
+                        var queryNum = query.split('=')[1];
+                        if (queryNum == num) {
+                            $targetEle = $(this);
+                        }
+                    });
+                    changeSelected($targetEle);
+                }
+            }
+
+            function changeSelected($targetEle) {
+                $links.removeClass('selected');
+                $targetEle.addClass('selected');
+                var num = $targetEle.attr('attrNum');
+                $.ajax({
+                    url: '/api/test?num=' + num,
+                    success: function(data) {
+                        $('#content').html(data.title);
+                    }
+                });
+            }
+
+
+        })(); 
+
+    </script>
+  </body>
+</html>
