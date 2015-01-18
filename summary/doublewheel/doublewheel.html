@@ -1,0 +1,110 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>双滚轮</title>
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link href="./common.css" rel="stylesheet">        
+    <link href="./ui.doublewheel.css"  rel="stylesheet">
+    <style>
+        .test-btn {
+            height: 3rem;
+            font-size: 1.6rem;
+            width: 80%;
+            padding: .5rem 1rem;
+        }
+    </style>  
+</head>
+<body>
+    <input type="text" placeholder="点击选择时间" id="testBtn" class="test-btn" readonly>
+
+    <section class="double-all">
+        <div class="mask-double"></div>
+        <div class="double-wheel">
+            <p class="double-operate h2">
+                <span class="btn-cancel-wheel btn-oper">取消</span>
+                <span class="btn-sure-wheel btn-oper">确定</span>
+            </p>
+            <div class="selected-mark"></div>
+            <div class="wheel-container">
+                <div class="column-left container-column" style="-webkit-transition: all 0.1s ease-out;transition: all 0.1s ease-out;-webkit-transform: translate3d(0, 0,       0);transform: translate3d(0, 0, 0);">
+                    <p left="0000-00-00" class="left-item">不限</p>
+                    <p left="2015-01-18" class="left-item">今天</p>
+                    <p left="2015-01-19" class="left-item">明天</p>
+                    <p left="2015-01-20" class="left-item">1月20日</p>
+                    <p left="2015-01-21" class="left-item">1月21日</p>
+                    <p left="2015-01-22" class="left-item">1月22日</p>
+                    <p left="2015-01-23" class="left-item">1月23日</p>
+                    <p left="2015-01-24" class="left-item">1月24日</p>
+                    <p left="2015-01-25" class="left-item">1月25日</p>
+                    <p left="2015-01-26" class="left-item">1月26日</p>
+                    <p left="2015-01-27" class="left-item">1月27日</p>
+                    <p left="2015-01-28" class="left-item">1月28日</p>
+                    <p left="2015-01-29" class="left-item">1月29日</p>
+                    <p left="2015-01-30" class="left-item">1月30日</p>
+                    <p left="2015-01-31" class="left-item">1月31日</p>
+                </div>
+                <div class="column-right container-column">
+                    <p right='00:00:00' class="right-item">不限</p>
+                    <p right='07:00:00' class="right-item">7:00</p>
+                    <p right='07:30:00' class="right-item">7:30</p>
+                    <p right='08:00:00' class="right-item">8:00</p>
+                    <p right='08:30:00' class="right-item">8:30</p>
+                    <p right='09:00:00' class="right-item">9:00</p>
+                    <p right='09:30:00' class="right-item">9:30</p>
+                    <p right='10:00:00' class="right-item">10:00</p>
+                    <p right='10:30:00' class="right-item">10:30</p>
+                    <p right='11:00:00' class="right-item">11:00</p>
+                    <p right='11:30:00' class="right-item">11:30</p>
+                    <p right='12:00:00' class="right-item">12:00</p>
+                    <p right='12:30:00' class="right-item">12:30</p>
+                    <p right='13:00:00' class="right-item">13:00</p>
+                    <p right='13:30:00' class="right-item">13:30</p>
+                    <p right='14:00:00' class="right-item">14:00</p>
+                    <p right='14:30:00' class="right-item">14:30</p>
+                    <p right='15:00:00' class="right-item">15:00</p>
+                    <p right='15:30:00' class="right-item">15:30</p>
+                    <p right='16:00:00' class="right-item">16:00</p>
+                    <p right='16:30:00' class="right-item">16:30</p>
+                    <p right='17:00:00' class="right-item">17:00</p>
+                    <p right='17:30:00' class="right-item">17:30</p>
+                    <p right='18:00:00' class="right-item">18:00</p>
+                    <p right='18:30:00' class="right-item">18:30</p>
+                    <p right='19:00:00' class="right-item">19:00</p>
+                    <p right='19:30:00' class="right-item">19:30</p>
+                    <p right='20:00:00' class="right-item">20:00</p>
+                    <p right='20:30:00' class="right-item">20:30</p>
+                    <p right='21:00:00' class="right-item">21:00</p>
+                    <p right='21:30:00' class="right-item">21:30</p>
+                    <p right='22:00:00' class="right-item">22:00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        var require = {
+            paths: {
+                'zeptoDir': './zepto',
+                'zepto': './zepto/zepto',
+                'zepto.sp': './zepto.subscribepublish'
+            },
+            shim: {
+                zepto: {
+                    exports: '$'
+                },
+                zeptoPlugins: {
+                    deps: ['zepto']
+                },
+                main: {
+                    deps: ['zepto', 'zeptoPlugins']
+                }
+            }
+        };
+    </script>
+    <script src="./require.js" data-main="main"></script>
+</body>
+</html>
